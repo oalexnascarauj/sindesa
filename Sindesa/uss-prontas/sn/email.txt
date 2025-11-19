@@ -11,11 +11,7 @@ Pedimos, por gentileza, que revisem os critérios de aceitação para que possam
 
 As seguintes histórias estão prontas para análise:
 
-- **STRY0087120** – US001: Incluir Evento Agropecuário
-- **STRY0087153** – US002: Incluir Receituário Brucelose
-- **STRY0087163** – US004: Incluir Espécie Regra Fundos
-- **STRY0087165** – US005: Listar Estabelecimentos Rurais
-- **STRY0087224** – US006: Listar Eventos Agropecuários
+- **STRY0087XXX** – US014: Incluir Comunicação de Evolução/Transferência de Animais
 
 Adicionalmente, informamos que os códigos das estórias (STRY) foram inseridos na planilha "versão 2.0". 
 Vocês podem utilizar esses códigos para filtrar e verificar quais requisitos estão associados a cada estória.
@@ -25,4 +21,4 @@ Qualquer dúvida ou ponto de ajuste, estamos à disposição para discutir.
 Agradeço a atenção.
 
 At.te,
-Aleexandre Araújo.
+Alexandre Araújo.

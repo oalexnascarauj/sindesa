@@ -1,0 +1,3 @@
+Leia os arquivos em /arquivos e aprenda como fazer uma estória de usuário no padrão loglab.
+São 2 arquivos, um orientativo de como se deve escrever uma estória (docx) e outro é um modelo de estória no padrão (US001).
+Gere, com base no código fornecido e todos os componente de tela encontrado nele, uma estória de usuário no padrão especificado.
