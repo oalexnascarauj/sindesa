@@ -1,4 +1,5 @@
 # US012 - Analisar Comunicação de Nascimentos
+#### STRY0087687
 
 ## DESCRIÇÃO
 
