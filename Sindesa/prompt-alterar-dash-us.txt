@@ -1,0 +1,6 @@
+Para os requisitos 
+RF-AC-002
+
+1) Altere o Status deles para: fazendo
+2) Altere a estória deles para "US002 - Cadastro de Propriedade Rural"
+3) Altere o responsável para "Alexandre Araújo"

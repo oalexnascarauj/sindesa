@@ -1,0 +1,23 @@
+Para: Wilken Lima; Leandro Passos
+Cc: Raquel Zampronio
+Assunto: Validação de Histórias de Usuário (Sprint XX)
+
+Prezados Wilken e Leandro,
+
+Espero que este e-mail os encontre bem.
+
+Encaminhamos para validação o conjunto de Histórias de Usuário que foram documentadas e finalizadas. 
+Pedimos, por gentileza, que revisem os critérios de aceitação para que possamos dar seguimento.
+
+As seguintes histórias estão prontas para análise:
+
+- **STRY0087412** – US007: Incluir Comunicação de Atualização de Estoque de Rebanho
+- **STRY0087415** – US008: Visualizar Comunicação de Atualização de Estoque de Rebanho
+- **STRY0087416** – US009: Incluir Comunicação de Vacinação
+
+Qualquer dúvida ou ponto de ajuste, estamos à disposição para discutir.
+
+Agradeço a atenção.
+
+At.te,
+Alexandre Araújo.
