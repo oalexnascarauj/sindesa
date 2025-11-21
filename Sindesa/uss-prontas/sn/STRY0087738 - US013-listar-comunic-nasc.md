@@ -10,6 +10,12 @@
 **QUERO** pesquisar e visualizar comunicações de nascimentos registradas no sistema utilizando diversos critérios de filtro
 **PARA QUE** eu possa consultar, gerenciar e controlar as comunicações de nascimentos de animais, permitindo visualizar, cancelar e imprimir as comunicações conforme necessário, além de monitorar o status e histórico das comunicações realizadas.
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US013 Listar Comunicação de Nascimentos](US013-listar-comunic-nasc.png)
+
+*Figura 1: Protótipo da tela de listagem de comunicações de nascimentos com filtros dinâmicos, resultados paginados e ações por registro (visualizar, analisar, cancelar, imprimir) conforme situação da comunicação.*
+
 ## 1. Critérios de Aceitação - Seção "Filtro de Pesquisa de Comunicação de Nascimentos"
 
 ### i) Painel de Filtros (Fieldset Expansível)

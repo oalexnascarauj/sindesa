@@ -10,6 +10,12 @@
 **QUERO** analisar uma comunicação de nascimento que está "EM ANÁLISE" por quebra de regras (limite de matrizes ou prazo de carência)
 **PARA QUE** eu possa aprovar ou reprovar a comunicação com base na justificativa fornecida.
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US012 Analisar Comunicação de Nascimentos](US012-visualizar-comunic-nasc.png)
+
+*Figura 1: Tela de análise de comunicação de nascimentos com dados da comunicação, questionário justificativo e botões de aprovação/reprovação*
+
 ## 1. Critérios de Aceitação - Campos 
 
 *Os campos a seguir exibem os dados da comunicação original em modo de apenas visualização.*

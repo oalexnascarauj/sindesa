@@ -7,6 +7,12 @@
 **QUERO** incluir uma comunicação de atualização de estoque de rebanho
 **PARA QUE** eu possa atualizar o inventário pecuário do estabelecimento
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US007 Incluir Comunicação de Atualização de Estoque de Rebanho](US007-incluir-comun-atual-estoq-rebanho.png)
+
+*Figura 1: Tela de inclusão de comunicação de atualização de estoque de rebanho com campos para campanha, produtor e exploração*
+
 ## 1. Critérios de Aceitação - Campos
 
 ### i) Campanha

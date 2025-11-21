@@ -10,6 +10,12 @@
 **QUERO** registrar uma comunicação de vacinação para minhas explorações
 **PARA QUE** eu possa cumprir com as obrigações sanitárias e manter o controle vacinal do meu rebanho atualizado perante os órgãos fiscalizadores.
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US009 Incluir Comunicação de Vacinação](US009-incluir-comunic-vacina.png)
+
+*Figura 1: Tela de inclusão de comunicação de vacinação com campos para doença, campanha, produtor, exploração e lotes de vacinação*
+
 ## 1. Critérios de Aceitação - Campos
 
 ### i) Doença

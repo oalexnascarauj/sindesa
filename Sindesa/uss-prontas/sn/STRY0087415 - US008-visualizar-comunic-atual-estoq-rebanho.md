@@ -7,6 +7,12 @@
 **QUERO** visualizar os detalhes completos de uma comunicação de atualização de estoque de rebanho existente
 **PARA QUE** eu possa consultar todas as informações cadastradas, acompanhar o status da comunicação e verificar eventuais recusas
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US008 Visualizar Comunicação de Atualização de Estoque de Rebanho](US008-visualizar-comunic-atual-estoq-rebanho.png)
+
+*Figura 1: Tela de visualização de comunicação de atualização de estoque de rebanho com dados do produtor, exploração, estoques atual e após comunicação*
+
 ## 1. Critérios de Aceitação - Campos Principais
 
 ### i) Identificador da Comunicação

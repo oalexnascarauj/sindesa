@@ -12,7 +12,7 @@
 
 ## PROTÓTIPO DE TELA
 
-![Protótipo - US001 Incluir Evento Agropecuário](US001-incluir-evento-agropecuario.png)
+![Protótipo - US001 Incluir Evento Agropecuário](US001-incluir-eventos-agropecuarios.png)
 
 *Figura 1: Tela de inclusão de receituário de brucelose com campos para veterinário, produtor, estabelecimento e composição*
 

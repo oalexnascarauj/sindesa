@@ -12,7 +12,9 @@
 
 ## PROTÓTIPO DE TELA
 
-*[Inserir Protótipo da tela de inclusão de comunicação de evolução/transferência]*
+![Protótipo - US014 Incluir Comunicação de Evolução/Transferência](US014-incluir-evolucao-aprov-reprov-regras-carencia.png)
+
+*Figura 1: Protótipo da tela de inclusão de comunicação de evolução/transferência com campos obrigatórios, tabela de evoluções/transferências, validação de carências e modal de inclusão de itens por espécie.*
 
 ## 1. Critérios de Aceitação - Campos Principais
 

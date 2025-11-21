@@ -14,7 +14,7 @@
 
 ## PROTÓTIPO DE TELA
 
-![Protótipo - US005 Listar Estabelecimento Rural](US005-listar-estabelecimento-rural.png)
+![Protótipo - US005 Listar Estabelecimentos Rurais](./US005-listar-estabelecimentos-rurais.png)
 
 *Figura 1: Tela de listagem com filtros de pesquisa e tabela de resultados com ações para cada estabelecimento*
 

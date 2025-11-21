@@ -10,6 +10,12 @@
 **QUERO** registrar nascimentos do meu rebanho informando espécie, estratificação e quantidade
 **PARA QUE** eu possa manter o controle zootécnico atualizado e cumprir com as obrigações sanitárias, mesmo quando houver necessidade de justificar nascimentos fora dos parâmetros normais.
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US010 Incluir Comunicação de Nascimentos](US010-incluir-comunic-nasc.png)
+
+*Figura 1: Tela de inclusão de comunicação de nascimentos com campos para produtor, exploração, espécie, estratificação e quantidade com validação de regras de carência*
+
 ## 1. Critérios de Aceitação - Campos
 
 ### i) Identificador

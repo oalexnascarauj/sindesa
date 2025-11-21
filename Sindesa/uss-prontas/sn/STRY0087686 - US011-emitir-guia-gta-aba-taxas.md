@@ -10,6 +10,12 @@
 **QUERO** visualizar e gerenciar as taxas aplicáveis à emissão da Guia de Trânsito Animal com discriminação por sexo dos animais
 **PARA QUE** eu possa controlar os valores de FETHAB, FESA e Taxa de Defesa Sanitária separados por macho e fêmea conforme as regras de fundos configuradas
 
+## PROTÓTIPO DE TELA
+
+![Protótipo - US011 Emitir Guia de Trânsito Animal (GTA) - Aba Taxas](US011-emitir-guia-gta-aba-taxas.png)
+
+*Figura 1: Aba Taxas da emissão de GTA com tabelas de DARs e boletos discriminados por sexo (macho/fêmea) conforme regras de fundos configuradas*
+
 ## CRITÉRIOS DE ACEITAÇÃO - Campos e estruturas da aba "Taxas"
 
 ### 1. Cabeçalho e Navegação
