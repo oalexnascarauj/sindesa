@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Regras de Negócio - Funcionalidade "Carência de Comunicações"</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #337AB7;
+      color: #286090;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s;
+    }
+    header {
+      background: linear-gradient(90deg, #286090 60%, #337AB7 100%);
+      color: #FFFFFF;
+      padding: 2rem 1rem 1rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(44,62,80,0.18);
+      border-bottom: 1px solid #286090;
+    }
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #28609044;
+    }
+    h2 {
+      color: #337AB7;
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      border-left: 4px solid #286090;
+      padding-left: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    section {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: #F7F5F3;
+      border-radius: 16px;
+      box-shadow: 0 2px 24px rgba(44,62,80,0.10);
+      padding: 2rem 2.5rem;
+      border: 1px solid #337AB7;
+      color: #286090;
+    }
+    ul, ol {
+      margin-left: 1.5rem;
+    }
+    .fluxo {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: linear-gradient(90deg, #337AB7 60%, #286090 100%);
+      border-radius: 10px;
+      box-shadow: 0 1px 12px #337AB744;
+      color: #FFFFFF;
+      font-size: 1.08rem;
+      border-left: 4px solid #286090;
+    }
+    .mermaid {
+      background: #FFFFFF;
+      border-radius: 10px;
+      box-shadow: 0 1px 12px #337AB744;
+      margin: 1.5rem 0;
+      padding: 1rem;
+      overflow-x: auto;
+      border: 1px solid #337AB7;
+      color: #286090;
+    }
+    .obs {
+      background: #337AB7;
+      border-left: 4px solid #286090;
+      padding: 1rem;
+      margin: 2rem auto;
+      border-radius: 10px;
+      color: #FFFFFF;
+      font-size: 1.08rem;
+      box-shadow: 0 1px 12px #337AB744;
+      max-width: 700px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .obs ul {
+      display: inline-block;
+      text-align: left;
+      margin: 0 auto;
+    }
+    a {
+      color: #337AB7;
+      text-decoration: underline;
+    }
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #337AB7;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #286090;
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    ::selection {
+      background: #286090;
+      color: #FFFFFF;
+    }
+    footer {
+      width: 100%;
+      background: #286090;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 1.2rem 0 1.2rem 0;
+      font-size: 1.08rem;
+      letter-spacing: 0.5px;
+      border-top: 1px solid #337AB7;
+      margin-top: 2rem;
+    }
+    @media (max-width: 700px) {
+      section { padding: 1rem; }
+      .mermaid { padding: 0.5rem; }
+      th, td { padding: 0.5rem; }
+    }
+    a {
+      color: #81c784;
+      text-decoration: underline;
+    }
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #263238;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #388E3C;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    ::selection {
+      background: #388E3C;
+      color: #fff;
+    }
+    @media (max-width: 700px) {
+      section { padding: 1rem; }
+      .mermaid { padding: 0.5rem; }
+      th, td { padding: 0.5rem; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        background: '#F7F5F3',
+        primaryColor: '#337AB7',
+        edgeLabelBackground:'#F7F5F3',
+        nodeTextColor: '#286090',
+        fontFamily: 'Segoe UI, Arial, sans-serif',
+        clusterBkg: '#F7F5F3',
+        clusterBorder: '#337AB7',
+        secondaryColor: '#286090',
+        tertiaryColor: '#337AB7',
+        lineColor: '#286090',
+        border1: '#337AB7',
+        border2: '#286090',
+        textColor: '#286090',
+        nodeBorder: '#286090',
+        mainBkg: '#FFFFFF',
+        nodeBkg: '#FFFFFF',
+        nodeTextColor: '#286090',
+        titleColor: '#337AB7',
+      }
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Regras de Negócio - Funcionalidade Carência de Comunicações</h1>
+    <div>Processos de Evolução de Rebanho e Nascimento &mdash; Cenário Atual e Desejável</div>
+  </header>
+  <section>
+    <h2>1. Evolução de Rebanho</h2>
+    <strong>Cenário Atual (ANTES)</strong>
+    <ul>
+      <li>Usuário solicita a evolução de animais.</li>
+      <li>Sistema consulta o saldo apto por espécie/faixa etária.</li>
+      <li>Verificação de carência apenas por espécie.</li>
+      <li>Permite evolução e atualiza saldo se houver saldo apto suficiente.</li>
+      <li>Campos de saldo temporário/parcial podem ser exibidos.</li>
+      <li>Não há controle detalhado de datas de chegada/evolução.</li>
+    </ul>
+    <div class="fluxo"><strong>Fluxo Simplificado:</strong><br>Solicitação → Consulta saldo → Verificação de carência → Permissão/Recusa → Atualização de saldo</div>
+    <div class="mermaid">
+flowchart TD
+    INICIO([Solicitação de evolução]) --> CONSULTA_SALDO([Consulta saldo apto por espécie/faixa etária])
+    CONSULTA_SALDO --> VERIFICA_CARENCIA([Verifica carência por espécie])
+    VERIFICA_CARENCIA --> DECISAO{Saldo apto suficiente?}
+    DECISAO -- Não --> RECUSA([Recusa operação])
+    DECISAO -- Sim --> PERMITE([Permite evolução])
+    PERMITE --> ATUALIZA_SALDO([Atualiza saldo])
+    </div>
+    <strong>Cenário Desejável (DEPOIS)</strong>
+    <ol>
+      <li>Usuário solicita evolução de animais, informando espécie, faixa etária e quantidade.</li>
+      <li>Sistema consulta saldo apto por espécie, faixa etária e datas de chegada/evolução.</li>
+      <li>Verifica carência específica da faixa etária.</li>
+      <li>Para cada grupo, verifica datas de chegada/evolução + carência.</li>
+      <li>Verifica se existe GTA emitida para a mesma faixa etária. Se houver, verifica carência de GTA.</li>
+      <li>Permite evolução e atualiza saldo apto se houver saldo suficiente e carências cumpridas.</li>
+      <li>Se não, exibe questionário de justificativa obrigatório.</li>
+      <li>Comunicação entra em análise e aguarda aprovação.</li>
+      <li>Se aprovada, efetiva comunicação e atualiza saldos. Motivo da recusa permanece em branco.</li>
+      <li>Se recusada, servidor deve preencher Motivo da recusa e recusa comunicação.</li>
+      <li>Remove campos de saldo temporário/parcial da interface.</li>
+    </ol>
+    <div class="fluxo"><strong>Fluxo Detalhado:</strong><br>Solicitação → Consulta saldo apto (por faixa etária e datas) → Verificação de carência → Verificação de carência de GTA → Permissão/Recusa → Questionário → Comunicação em análise → Aprovação/Recusa → Atualização de saldo apto</div>
+    <div class="mermaid">
+flowchart TD
+    S1([Usuário solicita comunicação de evolução<br/>Informando espécie, faixa etária e quantidade]) --> S2([Consulta saldo apto por faixa etária])
+    S2 --> S3([Verifica carência de evolução])
+    S3 --> D1{Há carência de evolução?}
+    D1 --|Sim|--> Q1([Exibe questionário de justificativa obrigatório])
+    Q1 --> S4([Salva comunicação com status Em análise])
+    S4 --> S5([Servidor responsável analisa comunicação])
+    S5 --> D2{Aprovar comunicação?}
+    D2 --|Sim|--> S6([Atualiza saldo apto])
+    D2 --|Não|--> R1([Servidor preenche Motivo da recusa - obrigatório])
+    R1 --> S7([Salva comunicação como Recusada])
+    D1 --|Não|--> S8([Verifica carência de emissão de GTA])
+    S8 --> D3{Há carência de GTA?}
+    D3 --|Sim|--> Q1
+    D3 --|Não|--> S6
+    S6 --> F1([Fim])
+    S7 --> F1
+    </div>
+  </section>
+  <section>
+    <h2>2. Nascimento</h2>
+    <strong>Cenário Atual (ANTES)</strong>
+    <ul>
+      <li>Usuário solicita registro de nascimento.</li>
+      <li>Sistema consulta saldo de matrizes (fêmeas ≥ 13-24 meses).</li>
+      <li>Permite nascimento até o limite do saldo de matrizes.</li>
+      <li>Carência é genérica, não vinculada à data de chegada/evolução.</li>
+    </ul>
+    <div class="fluxo"><strong>Fluxo Simplificado:</strong><br>Solicitação → Consulta matrizes → Permissão/Recusa → Atualização de saldo</div>
+    <div class="mermaid">
+flowchart TD
+    INICIO_N([Solicitação de nascimento]) --> CONSULTA_MATRIZES([Consulta saldo de matrizes])
+    CONSULTA_MATRIZES --> DECISAO_N{Saldo de matrizes suficiente?}
+    DECISAO_N -- Não --> RECUSA_N([Recusa operação])
+    DECISAO_N -- Sim --> PERMITE_N([Permite nascimento])
+    PERMITE_N --> ATUALIZA_SALDO_N([Atualiza saldo de matrizes])
+    </div>
+    <strong>Cenário Desejável (DEPOIS)</strong>
+    <ol>
+      <li>Usuário solicita registro de nascimento, informando espécie, faixa etária e quantidade.</li>
+      <li>Sistema consulta matrizes aptas, considerando carência específica por faixa etária.</li>
+      <li>Para cada matriz, verifica datas de chegada + carência.</li>
+      <li>Verifica se existe GTA emitida para a mesma faixa etária. Se houver, verifica carência de GTA.</li>
+      <li>Permite nascimento apenas se quantidade ≤ matrizes aptas e carências cumpridas.</li>
+      <li>Se não, exibe questionário de justificativa obrigatório.</li>
+      <li>Comunicação entra em análise e aguarda aprovação.</li>
+      <li>Se aprovada, efetiva comunicação e atualiza saldos. Motivo da recusa permanece em branco.</li>
+      <li>Se recusada, servidor deve preencher Motivo da recusa e recusa comunicação.</li>
+      <li>Atualiza saldo de matrizes aptas após nascimento.</li>
+    </ol>
+    <div class="fluxo"><strong>Fluxo Detalhado:</strong><br>Solicitação → Consulta matrizes aptas (por faixa etária e datas) → Verificação de carência → Verificação de carência de GTA → Permissão/Recusa → Questionário → Comunicação em análise → Aprovação/Recusa → Atualização de saldo matrizes aptas</div>
+    <div class="mermaid">
+flowchart TD
+    S1([Usuário solicita comunicacao de nascimento]) --> S2([Consulta saldo de rebanho de matrizes aptas por faixa etaria])
+    S2 --> D1{Ha matrizes aptas suficientes?}
+    D1 --|Nao|--> Q1([Exibe questionario de justificativa obrigatorio])
+    Q1 --> S4([Salva comunicacao com status Em analise])
+    S4 --> S5([Servidor responsavel analisa comunicacao])
+    S5 --> D2{Aprovar comunicacao?}
+    D2 --|Sim|--> S6([Atualiza saldo apto])
+    D2 --|Nao|--> R1([Servidor preenche Motivo da recusa obrigatorio])
+    R1 --> S7([Salva comunicacao como Recusada])
+    S6 --> F1([Fim])
+    S7 --> F1
+    D1 --|Sim|--> S8([Verifica se existe GTA emitida para as matrizes usadas no nascimento])
+    S8 --> D3{GTA emitida?}
+    D3 --|Nao|--> S9([Permite nascimento e salva comunicacao de nascimento])
+    S9 --> F1
+    D3 --|Sim|--> S11([Verifica carencia de emissao da GTA das matrizes])
+    S11 --> D4{Carencia de GTA cumprida?}
+    D4 --|Nao|--> Q1
+    D4 --|Sim|--> S9
+    </div>
+  </section>
+  <section class="obs">
+    <strong>Observações Gerais:</strong>
+    <ul>
+      <li>Todas as regras de carência devem ser aplicadas considerando espécie, faixa etária e quantidade.</li>
+      <li>O sistema deve registrar e consultar datas de chegada, evolução e nascimento para garantir precisão no cálculo do saldo apto.</li>
+      <li>Mensagens de bloqueio devem ser claras e orientativas, promovendo transparência ao usuário.</li>
+      <li>O processo de comunicação em análise garante maior controle e rastreabilidade das exceções, fortalecendo a governança dos procedimentos.</li>
+      <li>O campo "Motivo da recusa" é obrigatório sempre que houver recusa de comunicação em análise.</li>
+    </ul>
+  </section>
+  <footer>
+    Especificado por Alexandre Araújo - Analista de Requisitos
+  </footer>
+</body>
+</html>

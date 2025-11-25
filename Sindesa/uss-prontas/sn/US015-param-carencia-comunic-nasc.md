@@ -1,5 +1,4 @@
-
-# US015 - Alterar Parâmetros da Guia "Parâmetros Animal"
+# US015 - Alterar Parâmetros da Guia Parâmetros Animal
 #### STRY0087925
 
 ## DESCRIÇÃO
