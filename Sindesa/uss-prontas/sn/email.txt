@@ -11,7 +11,7 @@ Pedimos, por gentileza, que revisem os critérios de aceitação para que possam
 
 As seguintes histórias estão prontas para análise:
 
-- **STRY0087925** – US015: Alterar Parâmetros da Guia Parâmetros Animal
+- **STRY0087925** – Incluir Espécie - Carência para comunicação de Nascimento e Evolução
 
 Adicionalmente, informamos que os códigos das estórias (STRY) foram inseridos na planilha "versão 2.0". 
 Vocês podem utilizar esses códigos para filtrar e verificar quais requisitos estão associados a cada estória.
