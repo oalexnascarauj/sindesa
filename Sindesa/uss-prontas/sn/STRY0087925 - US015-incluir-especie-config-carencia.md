@@ -12,7 +12,7 @@
 
 ## PROTÓTIPO DE TELA
 
-*[Inserir Protótipo da tela de inclusão de espécie]*
+![Protótipo da tela de inclusão de espécie](US015-param-carencia-comunic-nasc.png)
 
 ## 1. Critérios de Aceitação - Campos
 
