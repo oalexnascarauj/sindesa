@@ -1,5 +1,5 @@
 # US001 - Incluir Evento Agropecuário 
-#### STRY0087120
+#### STRY0087120 ok
 
 ## DESCRIÇÃO
 

@@ -1,5 +1,120 @@
-[
-  {
-    "output": "# US002 - Gerenciar Cadastro de Estabelecimento Agropecuário  \n#### STRY0087131\n\n## DESCRIÇÃO\n\n**Título da Tela:** + Cadastro de Estabelecimento Agropecuário  \n**Caminho de navegação (breadcrumb):** Pesquisa de Estabelecimento > Cadastro de Estabelecimento Agropecuário\n\n**EU COMO** servidor fiscal estadual do INDEA, responsável pelo saneamento agropecuário  \n**QUERO** cadastrar, editar, visualizar e excluir informações dos estabelecimentos agropecuários, incluindo dados cadastrais, localização geográfica, classificação sanitária, produtores vinculados e documentos relacionados  \n**PARA QUE** eu possa controlar e monitorar os estabelecimentos com foco na saúde animal e vegetal, garantindo conformidade com as normas do INDEA/MT e facilitando processos de fiscalização e auditoria.\n\n## PROTÓTIPO DE TELA\n\nSugestão para protótipo de tela CRUD em abas:\n\n- Aba 1: Dados Cadastrais  \n- Aba 2: Localização e Georreferenciamento  \n- Aba 3: Classificação Sanitária  \n- Aba 4: Produtores Vinculados  \n- Aba 5: Documentos e Anexos  \n\nCampos dispostos em formulário com layout responsivo, botões na parte inferior (Salvar, Limpar, Excluir, Fechar) e tabelas para relacionamentos.\n\n---\n\n## 1. Critérios de Aceitação - Campos\n\n#### i) Código do Estabelecimento\n\n- **Título**: Código  \n- **Tipo do Campo**: Texto (Readonly)  \n- **Estado Inicial**: Vazio no cadastro, preenchido automaticamente após salvar  \n- **Preenchimento do Campo**: Gerado pelo sistema  \n- **Visibilidade**: Visível após cadastro inicial  \n- **Tamanho Máximo**: 15 caracteres  \n- **Valor Único**: Sim  \n- **Formato**: ALFA-NUMÉRICO sequencial (EST-AAAA-NNNNN)  \n- **Validação**: Único no sistema  \n\n#### ii) Nome do Estabelecimento\n\n- **Título**: Nome do Estabelecimento  \n- **Tipo do Campo**: Texto  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Obrigatório  \n- **Visibilidade**: Sempre visível  \n- **Tamanho Máximo**: 150 caracteres  \n- **Validação**: Deve conter letras e números; não pode conter caracteres especiais  \n\n#### iii) Tipo de Estabelecimento\n\n- **Título**: Tipo de Estabelecimento  \n- **Tipo do Campo**: Dropdown (Seleção única)  \n- **Opções**: Fazenda, Sítio, Agroindústria, Criatório, Outros (dados em tabela tipos_estabelecimento)  \n- **Estado Inicial**: Placeholder \"Selecione o tipo\"  \n- **Preenchimento do Campo**: Obrigatório  \n- **Validação**: Deve ser um tipo cadastrado e ativo  \n\n#### iv) Inscrição Estadual\n\n- **Título**: Inscrição Estadual  \n- **Tipo do Campo**: Texto  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Opcional, mas se preenchido deve respeitar formato alfanumérico  \n- **Tamanho Máximo**: 20 caracteres  \n- **Validação**: Se preenchido, verificar formato e inexistência de duplicidade  \n\n#### v) Município\n\n- **Título**: Município  \n- **Tipo do Campo**: Dropdown (Seleção única)  \n- **Opções**: Listagem oficial dos municípios do Estado de Mato Grosso  \n- **Estado Inicial**: Placeholder \"Selecione o município\"  \n- **Preenchimento do Campo**: Obrigatório  \n- **Validação**: Deve ser município existente e ativo no cadastro  \n\n#### vi) Endereço Completo\n\n- **Título**: Endereço Completo  \n- **Tipo do Campo**: Texto multilinha  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Obrigatório  \n- **Tamanho Máximo**: 250 caracteres  \n- **Validação**: Deve conter logradouro, número e complemento, se aplicável  \n\n#### vii) Geo-coordenadas (Latitude e Longitude)\n\n- **Título**: Latitude e Longitude  \n- **Tipo do Campo**: Texto (Formato decimal)  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Opcional, porém recomendado para georreferenciamento  \n- **Visibilidade**: Sempre visível  \n- **Validação**: Se preenchido, deve validar padrão decimal GPS e estar dentro do território MT  \n\n#### viii) Classificação Sanitária\n\n- **Título**: Classificação Sanitária  \n- **Tipo do Campo**: Dropdown (Seleção única)  \n- **Opções**: Livre, Em Monitoramento, Condicionado, Suspenso  \n- **Estado Inicial**: Default \"Em Monitoramento\"  \n- **Preenchimento do Campo**: Obrigatório  \n- **Regra de Negócio**: Mudança deve ser registrada no log histórico com data, usuário e motivo  \n\n#### ix) Responsável Técnico\n\n- **Título**: Responsável Técnico  \n- **Tipo do Campo**: Autocomplete com base em cadastro de profissionais habilitados (veterinários, técnicos agrícolas)  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Opcional  \n- **Validação**: Deve estar ativo e possuir registro válido  \n\n#### x) Observações\n\n- **Título**: Observações  \n- **Tipo do Campo**: Texto multilinha  \n- **Estado Inicial**: Vazio  \n- **Preenchimento do Campo**: Opcional  \n- **Tamanho Máximo**: 500 caracteres  \n\n---\n\n## 2. Critérios de Aceitação – Seções\n\n### i) Aba \"Produtores Vinculados\"\n\n- **Tipo**: Tabela de dados vinculados ao estabelecimento  \n- **Colunas**: Código do Produtor, Nome do Produtor, CPF/CNPJ, Data de Vinculação e Ações  \n- **Estado Inicial**: Sem registros exibe mensagem “Nenhum produtor vinculado”  \n- **Ações na coluna 'Ações'**: Visualizar, Vincular Novo Produtor, Remover Vínculo   \n- **Validação**: Obrigatório pelo menos um produtor vinculado para salvar estabelecimento com status ativo  \n- **Visibilidade**: Sempre visível na aba  \n\n### ii) Aba \"Documentos e Anexos\"\n\n- **Tipo**: Upload e listagem de arquivos digitais  \n- **Campos/Colunas na tabela**: Tipo de Documento, Nome do Arquivo, Data do Upload, Usuário Responsável, Ações (visualizar, baixar, excluir)  \n- **Validação**: Permitir upload de arquivos no formato PDF, JPG, PNG até 5MB  \n- **Obrigatoriedade**: Documentos sanitários obrigatórios devem ser anexados para estabelecimento com classificação “Condicionado” ou “Suspenso”   \n- **Visibilidade**: Sempre visível  \n\n### iii) Aba \"Classificação Sanitária\"\n\n- **Campos**: Dropdown para seleção da classificação, tabela de histórico (data, usuário, motivo, classificação anterior e nova)  \n- **Visibilidade**: Visível somente para perfis autorizados (fiscais e gestores)  \n- **Validação**: Todo registro de alteração deve gerar entrada no histórico  \n\n---\n\n## 7. Critérios de Aceitação – Ações\n\n### i) Botão \"Salvar\"\n\n- **Status inicial:** habilitado somente se campos obrigatórios preenchidos corretamente  \n- **Tipo:** botão  \n- **Preenchimento:** texto \"Salvar\"  \n- **Visibilidade:** sempre visível na tela principal  \n- **Funcionalidade:**  \n  - Valida todos os campos obrigatórios e regras de negócio  \n  - Salva dados em banco de dados com geração automática de código no cadastro inicial  \n  - Atualiza cadastro existente ou cria novo  \n  - Atualiza registros relacionados e histórico de alteração de classificação  \n  - Exibe mensagem de sucesso ou erros na validação  \n- **Destino da navegação:** permanece na tela para continuar edição  \n\n### ii) Botão \"Limpar\"\n\n- **Status inicial:** habilitado  \n- **Tipo:** botão  \n- **Preenchimento:** texto \"Limpar\"  \n- **Visibilidade:** sempre visível  \n- **Funcionalidade:**  \n  - Limpa todos os campos do formulário mantendo o estado inicial  \n  - Confirmação opcional para evitar perda de dados não salvos  \n\n### iii) Botão \"Excluir\"\n\n- **Status inicial:** habilitado somente para cadastros existentes  \n- **Tipo:** botão  \n- **Preenchimento:** texto \"Excluir\"  \n- **Visibilidade:** visível somente se o código do estabelecimento estiver carregado  \n- **Funcionalidade:**  \n  - Remove o cadastro se não houver pendências ativas ou restrições legais  \n  - Valida ausência de eventos ou fiscalizações vinculadas pendentes  \n  - Solicita confirmação do usuário  \n  - Exibe mensagens de erro em caso de bloqueios por regra sanitária ou dependência de dados  \n- **Destino da navegação:** redireciona para listagem de Estabelecimentos após exclusão  \n\n### iv) Botão \"Fechar\"\n\n- **Status inicial:** sempre habilitado  \n- **Tipo:** botão  \n- **Preenchimento:** texto \"Fechar\"  \n- **Visibilidade:** Sempre visível  \n- **Funcionalidade:**  \n  - Fecha a tela corrente retornando para listagem ou dashboard inicial  \n  - Se houver dados não salvos, solicita confirmação para descartar alterações  \n\n---\n\n## 8. Requisitos Considerados\n\n- **RF-EST-002 – Cadastro e Controle de Estabelecimentos Agropecuários:** O sistema deve permitir o CRUD completo dos estabelecimentos, com vinculação a produtores e classificação sanitária conforme regulamentos do INDEA/MT.\n\n- **RF-GEO-005 – Georreferenciamento Obrigatório:** Estabelecimentos devem conter geolocalização válida para análise de risco sanitário e planejamento de fiscalização.\n\n- **RF-DOC-003 – Gestão de Documentos Sanitários:** Obrigatoriedade de anexar documentos de comprovação sanitária em formatos PDF/JPG/PNG, respeitando limites de tamanho e verificações de integridade.\n\n- **REQ-ACESSO-007 – Controle de Acesso:** Apenas usuários com perfil \"Fiscal\" ou \"Gestor\" podem alterar a classificação sanitária e gerenciar documentos sensíveis.\n\n- **Instruções INDEA/MT 2023/456:** Deve ser garantida a rastreabilidade completa de alterações cadastrais, com registro de usuário, data e motivo para auditoria.\n\n---\n\n**FIM DA HISTÓRIA DE USUÁRIO**"
-  }
-]
+# 🧠 LEAN CANVAS — Preventis
+
+| Bloco | Descrição |
+|-------|-----------|
+| **Problema** | 1) Rastreabilidade deficiente na entrega e devolução de EPIs. <br>2) Dependência de papel e assinaturas físicas. <br>3) Baixo controle sobre CA e avarias. <br>4) Falta de evidências legais auditáveis. <br>5) Perdas financeiras por má gestão de estoque. |
+| **Segmentos de Clientes** | - Indústrias, construção civil, logística, agro, varejo. <br>- Empresas com +50 colaboradores. <br>- Gestores de Segurança (SESMT), Almoxarifes, Auditores SST, RH/Dir. Jurídica. |
+| **Proposta de Valor Única** | **“Rastreabilidade total com zero papel e segurança jurídica via WhatsApp — distribuição, devolução e baixa sem fricção.”** |
+| **Solução** | - ERP web + automação WhatsApp + assinatura digital integrada. <br>- Checkout rápido para entrega e devolução. <br>- Evidências auditáveis (log, foto, assinatura, hash). <br>- KPIs e alertas automáticos. |
+| **Canais** | - LinkedIn outbound + tráfego pago segmentado. <br>- Parcerias com fornecedores de EPI e consultorias SST. <br>- Demonstrações técnicas e POCs gratuitas. |
+| **Fontes de Receita** | - Assinatura SaaS por número de colaboradores. <br>- Add-ons: IA auditoria, Marketplace EPI, dossiê jurídico, treinamento. |
+| **Estrutura de Custo** | - Infra cloud + API WhatsApp + Clicksign. <br>- Desenvolvimento e suporte. <br>- Marketing + vendas + onboarding. |
+| **Métricas-Chave** | - Tempo médio de entrega/assinatura. <br>- % de avarias e CA vencido. <br>- Engajamento WhatsApp. <br>- CAC vs LTV. <br>- Redução de perda financeira. |
+| **Vantagem Injusta** | - Zero-app com adoção instantânea via WhatsApp. <br>- Prova jurídica automatizada. <br>- Diferencial tecnológico escalável. |
+
+---
+
+# 🚀 MVP — Proposta Detalhada
+
+### 🎯 Objetivo do MVP
+Validar se empresas com 50–200 colaboradores conseguem reduzir tempo e custo na gestão de EPIs e garantir rastreabilidade real através do fluxo Web + WhatsApp + Assinatura Digital.
+
+### 🧩 Componentes do MVP (mínimo necessário)
+| Componente | Descrição |
+|------------|----------|
+| **Dashboard básico** | Painel com linha do tempo de movimentos e KPIs simples |
+| **Gestão de estoque reduzida** | Entradas e saídas de EPIs sem módulos avançados |
+| **Fluxo de entrega** | Checkout rápido → assinatura digital → confirmação via WhatsApp |
+| **Fluxo de devolução** | Upload de foto no WhatsApp obrigatório para avarias |
+| **Assinatura Digital** | Integração Clicksign com status básico |
+| **Automação WhatsApp** | Envio automático de link, registro de foto, status de entrega |
+
+---
+
+### 🛠 Escopo Técnico do MVP
+- Backend Django básico com RBAC (Admin, SESMT, Almoxarife)
+- Banco PostgreSQL
+- Integração n8n + WhatsApp API
+- Integração Clicksign básica (criar envelope e coletar status)
+- Interface web simplificada (Movimentos + Assinaturas + Cadastros)
+- Armazenamento de evidências (foto + hash)
+
+---
+
+### 📈 Métricas do MVP
+| Métrica | Meta |
+|---------|------|
+| Redução do tempo médio de entrega | 60% |
+| Assinatura média no WhatsApp | < 5 minutos |
+| Redução de perdas operacionais | 10–15% |
+| Engajamento do colaborador no WhatsApp | > 80% |
+| Conversão POC → contrato | > 30% |
+
+---
+
+### 🧪 Teste de Validação (POC)
+1. Implantar em 2 empresas piloto (100–200 colaboradores).
+2. Operar 30 dias com acompanhamento.
+3. Comparar antes vs depois:
+   - tempo de entrega
+   - avarias
+   - rupturas de estoque
+   - uso de papel
+   - redução de custo
+4. Coleta de depoimentos e estudo de caso.
+
+---
+
+# 📣 Estratégia de Marketing (detalhada)
+
+## 🎯 Público-Alvo
+- Gestores SESMT
+- Diretores de operações
+- Compradores e Almoxarife
+- Advogados trabalhistas e RH
+
+---
+
+## 🪪 Posicionamento
+> **“O Preventis elimina papel, reduz perdas e blindagem jurídica na gestão de EPIs — com a simplicidade do WhatsApp.”**
+
+---
+
+## 📍 Estratégia de Entrada (Go-to-Market)
+| Etapa | Ação |
+|--------|-------|
+| **1 — Autoridade e conteúdo** | Artigos técnicos no LinkedIn sobre rastreabilidade, CA e legislação NR-6 |
+| **2 — Demonstrações online semanais** | Webinars curtos com simulação real do fluxo |
+| **3 — POCs direcionadas** | 30 dias de teste grátis com estudo de caso |
+| **4 — Parcerias estratégicas** | Fabricantes de EPI, consultorias SST e fornecedores ERP |
+| **5 — Marketing de prova social** | Cases com números de redução de perda e ganho de tempo |
+
+---
+
+## 📢 Ações de Marketing
+- **LinkedIn ADS** segmentado para SESMT & indústria (+ remarketing)
+- **Landing page com captura de leads + estudo de caso**
+- **Funil automático com RD Station ou n8n**
+- **Vídeos curtos real-demo (TikTok/YouTube Shorts/LinkedIn)**
+- **Participação em feiras industriais e SST**
+
+---
+
+## 📦 Oferta irresistível
+**POC gratuita de 30 dias**
++ estudo real de impacto financeiro
++ relatório jurídico automatizado
+
+---
+
+## 🧲 Funil Estratégico
+1. Atração: Conteúdo + anúncios segmentados
+2. Conversão: Landing page + demo agendada
+3. Nutrição: Cases, números reais, vídeos curtos
+4. Venda: POC 30 dias
+5. Expansão: upsell IA + marketplace + add-ons
+
+---
+
+# 🎤 Call to Action final
+> **Objetivo: fechar 5 POCs em 90 dias e validar métricas de adoção e redução de custos para escalar comercialmente.**

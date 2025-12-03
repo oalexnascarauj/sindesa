@@ -77,12 +77,12 @@ flowchart TD
     S4 --> S5([Servidor responsável analisa comunicação])
     S5 --> D2{Aprovar comunicação?}
 
-    D2 --|Sim|--> S6([Atualiza saldo apto])
+    D2 --|Sim|--> S6([Atualiza saldo da exploração])
     D2 --|Não|--> R1([Servidor preenche Motivo da recusa - obrigatório])
     R1 --> S7([Salva comunicação como Recusada])
 
     %% Ramo: Não há carência de evolução
-    D1 --|Não|--> S8([Verifica carência de emissão de GTA])
+    D1 --|Não|--> S8([Verifica carência de entrada de GTA])
     S8 --> D3{Há carência de GTA?}
 
     D3 --|Sim|--> Q1

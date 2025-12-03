@@ -1,5 +1,5 @@
 # US011 - Emitir Guia de Trânsito Animal (GTA) - Aba Taxas
-#### STRY0087686
+#### STRY0087686 ok
 
 ## DESCRIÇÃO
 

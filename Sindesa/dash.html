@@ -3,836 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US002 - Gerenciar Cadastro de Rebanho</title>
+    <title>Documentação de Regras de Negócio Agropecuário</title>
     <style>
-        * {
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #e67e22;
+            --light-bg: #ecf0f1;
+            --text-color: #333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
         }
 
-        body {
-            background-color: #f5f5f5;
-            padding: 20px;
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; }
+        h2 { 
+            color: var(--primary-color); 
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 { color: var(--secondary-color); margin-top: 25px; }
+
+        .card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: #2c3e50;
-            color: white;
             padding: 20px;
-        }
-
-        .breadcrumb {
-            font-size: 14px;
-            color: #bdc3c7;
-            margin-bottom: 10px;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #95a5a6;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .filters {
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 6px;
             margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary-color);
         }
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
+        .card.fiscal { border-left-color: #c0392b; }
+        .card.event { border-left-color: #f39c12; }
 
-        .filter-group label {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2c3e50;
-            font-size: 14px;
-        }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
 
-        .filter-group input,
-        .filter-group select {
-            padding: 8px 12px;
-            border: 1px solid #bdc3c7;
+        .tag {
+            display: inline-block;
+            background: var(--light-bg);
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 0.85em;
+            color: #7f8c8d;
+            font-family: monospace;
+            margin-left: 5px;
         }
 
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-
-        .btn-primary {
-            background: #3498db;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2980b9;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #219a52;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        th {
-            background: #34495e;
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .status-active {
-            color: #27ae60;
-            font-weight: 600;
-        }
-
-        .status-inactive {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-
-        .status-fiscalizacao {
-            color: #f39c12;
-            font-weight: 600;
-        }
-
-        .form-section {
-            background: white;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-section h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 8px 12px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .required::after {
-            content: " *";
-            color: #e74c3c;
-        }
-
-        .error {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            min-width: 400px;
-            max-width: 90%;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .upload-area {
-            border: 2px dashed #bdc3c7;
-            border-radius: 6px;
-            padding: 20px;
+        footer {
             text-align: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-
-        .upload-area:hover {
-            border-color: #3498db;
-        }
-
-        .file-list {
-            list-style: none;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #ecf0f1;
-            border-radius: 4px;
-            margin-bottom: 5px;
-        }
-
-        .file-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .file-action {
-            background: none;
-            border: none;
-            color: #3498db;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .file-action:hover {
-            color: #2980b9;
-        }
-
-        .file-action.delete {
-            color: #e74c3c;
-        }
-
-        .file-action.delete:hover {
-            color: #c0392b;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 40px;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
+
+    <header>
+        <div class="container">
+            <h1>Sistema de Gestão Agropecuária</h1>
+            <p>Documentação de Processos e Regras de Negócio</p>
+        </div>
+    </header>
+
     <div class="container">
-        <div class="header">
-            <div class="breadcrumb">Cadastro Agropecuário > Cadastro de Rebanho > Gerenciar Cadastro de Rebanho</div>
-            <div class="title">US002 - Gerenciar Cadastro de Rebanho</div>
-            <div class="subtitle">STRY0098345</div>
-        </div>
+        
+        <section id="intro">
+            <p>Este documento consolida as regras de negócio extraídas dos manuais operacionais e relatórios do sistema. O ecossistema abrange desde a movimentação animal até à fiscalização sanitária.</p>
+        </section>
 
-        <div class="content">
-            <!-- Filtros -->
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Código do Rebanho</label>
-                    <input type="text" id="filterCodigo" placeholder="REB-2024-00001">
-                </div>
-                <div class="filter-group">
-                    <label>Nome do Proprietário</label>
-                    <input type="text" id="filterProprietario" placeholder="Digite o nome">
-                </div>
-                <div class="filter-group">
-                    <label>Espécie Animal</label>
-                    <select id="filterEspecie">
-                        <option value="">Todas</option>
-                        <option value="Bovino">Bovino</option>
-                        <option value="Caprino">Caprino</option>
-                        <option value="Ovino">Ovino</option>
-                        <option value="Equino">Equino</option>
-                        <option value="Suíno">Suíno</option>
-                        <option value="Aves">Aves</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Situação</label>
-                    <select id="filterSituacao">
-                        <option value="">Todas</option>
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                        <option value="Sob Fiscalização">Sob Fiscalização</option>
-                    </select>
-                </div>
+        <section id="transito">
+            <h2>1. Trânsito e Movimentação</h2>
+            <p>Regras referentes ao transporte legal de animais e subprodutos entre propriedades, eventos e indústrias.</p>
+            
+            <div class="card">
+                <h3>Emissão de Documentos</h3>
+                <ul>
+                    <li><strong>Guia de Trânsito Animal (GTA):</strong> Obrigatória para qualquer movimentação de animais vivos. O sistema deve validar a origem, destino e finalidade antes da emissão. <span class="tag">Emitir_Guia_Transito_Animal_GTA_Geral.FUN</span></li>
+                    <li><strong>Guia de Trânsito de Subprodutos (GTS):</strong> Utilizada para o transporte de materiais derivados (não vivos), seguindo lógica similar de rastreabilidade. <span class="tag">Guia_de_Transito_de_Subprodutos_GTS.FUN</span></li>
+                    <li><strong>Segunda Via:</strong> Permitida a reimpressão de documentos válidos em caso de perda ou dano, mantendo os dados originais. <span class="tag">Emitir_Segunda_Via_GTA.FUN</span></li>
+                </ul>
             </div>
 
-            <!-- Ações Principais -->
-            <div class="actions">
-                <button class="btn btn-primary" onclick="novoCadastro()">+ Novo Rebanho</button>
-                <button class="btn btn-secondary" onclick="limparFiltros()">Limpar Filtros</button>
+            <div class="card">
+                <h3>Gestão Administrativa</h3>
+                <ul>
+                    <li><strong>Administração de GTA:</strong> Funcionalidades para consulta, cancelamento (dentro do prazo legal) e gestão das guias emitidas pelo produtor ou técnico. <span class="tag">Administrar_GTA.FUN</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="rebanho">
+            <h2>2. Gestão de Rebanho e Sanidade</h2>
+            <p>Processos para manutenção do inventário animal e cumprimento de obrigações sanitárias.</p>
+
+            <div class="card">
+                <h3>Controle de Estoque</h3>
+                <ul>
+                    <li><strong>Atualização de Saldo:</strong> O produtor deve comunicar alterações no rebanho para manter o saldo do sistema sincronizado com a realidade física da propriedade. <span class="tag">Comunicacao_Atualizacao_Estoque_Rebanho.FUN</span></li>
+                    <li><strong>Relatórios de Conferência:</strong> Geração de extratos para visualização do saldo atual por espécie e categoria animal. <span class="tag">Relatorio_de_Comunicacao_de_Estoque_de_Rebanho.FUN</span></li>
+                </ul>
             </div>
 
-            <!-- Tabela de Rebanhos -->
-            <div class="table-container">
-                <table id="tabelaRebanhos">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Proprietário</th>
-                            <th>CPF/CNPJ</th>
-                            <th>Espécie</th>
-                            <th>Quantidade</th>
-                            <th>Situação</th>
-                            <th>Data Cadastro</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyRebanhos">
-                        <!-- Dados serão preenchidos via JavaScript -->
-                    </tbody>
-                </table>
+            <div class="card">
+                <h3>Sanidade</h3>
+                <ul>
+                    <li><strong>Declaração de Vacinação:</strong> Obrigatória durante campanhas oficiais. O sistema deve registrar a vacina, data e lote, vinculando aos animais imunizados. <span class="tag">Comunicacao_Vacinacao.FUN</span></li>
+                </ul>
             </div>
+        </section>
 
-            <!-- Formulário de Cadastro/Edição -->
-            <div class="form-section" id="formRebanho" style="display: none;">
-                <h3 id="formTitle">Cadastrar Novo Rebanho</h3>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="required">Código do Rebanho</label>
-                        <input type="text" id="codigoRebanho" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">Nome do Proprietário</label>
-                        <input type="text" id="nomeProprietario" maxlength="100">
-                        <div class="error" id="errorProprietario">Campo obrigatório</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">CPF/CNPJ do Proprietário</label>
-                        <input type="text" id="cpfCnpj" placeholder="000.000.000-00 ou 00.000.000/0000-00">
-                        <div class="error" id="errorCpfCnpj">CPF/CNPJ inválido</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">Espécie Animal</label>
-                        <select id="especieAnimal">
-                            <option value="">Selecione espécie animal</option>
-                            <option value="Bovino">Bovino</option>
-                            <option value="Caprino">Caprino</option>
-                            <option value="Ovino">Ovino</option>
-                            <option value="Equino">Equino</option>
-                            <option value="Suíno">Suíno</option>
-                            <option value="Aves">Aves</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                        <div class="error" id="errorEspecie">Campo obrigatório</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">Quantidade de Animais</label>
-                        <input type="number" id="quantidadeAnimais" min="1" max="10000">
-                        <div class="error" id="errorQuantidade">Quantidade deve ser entre 1 e 10.000</div>
-                    </div>
-                    <div class="form-group">
-                        <label class="required">Situação do Rebanho</label>
-                        <select id="situacaoRebanho">
-                            <option value="Ativo">Ativo</option>
-                            <option value="Inativo">Inativo</option>
-                            <option value="Sob Fiscalização">Sob Fiscalização</option>
-                        </select>
-                    </div>
-                </div>
+        <section id="eventos">
+            <h2>3. Eventos Agropecuários</h2>
+            <p>Regras específicas para aglomerações de animais (feiras, leilões, exposições).</p>
 
-                <!-- Seção de Movimentações -->
-                <div class="form-section">
-                    <h3>Histórico de Movimentações</h3>
-                    <button class="btn btn-success" onclick="adicionarMovimentacao()" id="btnAddMovimentacao" disabled>+ Adicionar Movimentação</button>
-                    
-                    <div class="table-container" style="margin-top: 15px;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Tipo</th>
-                                    <th>Data</th>
-                                    <th>Quantidade</th>
-                                    <th>Observações</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodyMovimentacoes">
-                                <tr>
-                                    <td colspan="6" style="text-align: center;">Nenhuma movimentação cadastrada.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Seção de Anexos -->
-                <div class="form-section">
-                    <h3>Anexos Documentais</h3>
-                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                        <p>Clique para adicionar arquivos ou arraste aqui</p>
-                        <small>Formatos: PDF, JPG, PNG (Máx. 5MB cada)</small>
-                    </div>
-                    <input type="file" id="fileInput" multiple style="display: none;" onchange="adicionarArquivos(this.files)">
-                    
-                    <ul class="file-list" id="fileList">
-                        <!-- Lista de arquivos será preenchida via JavaScript -->
-                    </ul>
-                </div>
-
-                <!-- Ações do Formulário -->
-                <div class="actions">
-                    <button class="btn btn-primary" onclick="salvarRebanho()" id="btnSalvar">Salvar</button>
-                    <button class="btn btn-danger" onclick="excluirRebanho()" id="btnExcluir" style="display: none;">Excluir</button>
-                    <button class="btn btn-secondary" onclick="cancelarEdicao()">Cancelar</button>
-                </div>
+            <div class="card event">
+                <h3>Fluxo do Evento</h3>
+                <ul>
+                    <li><strong>Controle de Entrada:</strong> Registro obrigatório de todos os animais que adentram o recinto, validado via GTA de entrada. <span class="tag">Relatorio_Entrada_Animais_Evento_Agropecuario.REL</span></li>
+                    <li><strong>Ocorrências Internas:</strong> Deve ser possível registrar nascimentos e mortes ocorridos durante o evento, ajustando o saldo local.
+                        <ul>
+                            <li><span class="tag">Comunicar_Nascimento_de_Animais_Evento_Agro.FUN</span></li>
+                            <li><span class="tag">Comunicar_Morte_de_Animais_Evento_Agro.FUN</span></li>
+                        </ul>
+                    </li>
+                    <li><strong>Controle de Saída:</strong> Registro dos animais que deixam o evento, gerando base para novas GTAs de saída. <span class="tag">Relatorio_Saida_Animais_Evento_Agropecuario.REL</span></li>
+                    <li><strong>Encerramento:</strong> Processo formal para finalizar o evento no sistema, consolidando os dados. <span class="tag">Encerramento_de_Evento_Agropecuario.FUN</span></li>
+                </ul>
             </div>
-        </div>
+        </section>
+
+        <section id="fiscalizacao">
+            <h2>4. Fiscalização e Controle</h2>
+            <p>Ferramentas para órgãos reguladores monitorarem o cumprimento das normas.</p>
+
+            <div class="card fiscal">
+                <h3>Monitoramento e Auditoria</h3>
+                <ul>
+                    <li><strong>Controle de Frigoríficos:</strong> Relatório específico listando as GTAs recebidas por unidades de abate, cruzando dados de transporte com abate efetivo. <span class="tag">Relatório_Lista_GTA_Frigorifico.REL</span></li>
+                    <li><strong>Gestão de Inadimplentes:</strong> Identificação de produtores com pendências (sanitárias, cadastrais ou financeiras) que impedem movimentações. <span class="tag">Relatorio_inadimplentes.REL</span></li>
+                    <li><strong>Auditoria por ULE:</strong> Relatório quantitativo de "Termos de Verificação" emitidos por Unidade Local de Execução, para métricas de produtividade e fiscalização. <span class="tag">Relatorio_de_Quantidade_de_Termo_de_Verificacao_por_ULE.FUN</span></li>
+                </ul>
+            </div>
+        </section>
+
     </div>
 
-    <!-- Modal de Confirmação -->
-    <div class="modal" id="modalConfirmacao">
-        <div class="modal-content">
-            <h3>Confirmação</h3>
-            <p id="modalMessage">Confirma a exclusão do registro?</p>
-            <div class="modal-actions">
-                <button class="btn btn-danger" onclick="confirmarAcao()">Confirmar</button>
-                <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <p>Gerado automaticamente com base na análise dos ficheiros .FUN e .REL fornecidos.</p>
+    </footer>
 
-    <script>
-        // Dados mockados para demonstração
-        let rebanhos = [
-            {
-                id: 1,
-                codigo: 'REB-2024-00001',
-                proprietario: 'João Silva',
-                cpfCnpj: '123.456.789-00',
-                especie: 'Bovino',
-                quantidade: 150,
-                situacao: 'Ativo',
-                dataCadastro: '2024-01-15'
-            },
-            {
-                id: 2,
-                codigo: 'REB-2024-00002',
-                proprietario: 'Maria Santos',
-                cpfCnpj: '987.654.321-00',
-                especie: 'Caprino',
-                quantidade: 80,
-                situacao: 'Ativo',
-                dataCadastro: '2024-01-20'
-            },
-            {
-                id: 3,
-                codigo: 'REB-2024-00003',
-                proprietario: 'Fazenda Boa Esperança',
-                cpfCnpj: '12.345.678/0001-90',
-                especie: 'Bovino',
-                quantidade: 500,
-                situacao: 'Sob Fiscalização',
-                dataCadastro: '2024-02-01'
-            }
-        ];
-
-        let rebanhoEditando = null;
-        let arquivosAnexados = [];
-        let acaoPendente = null;
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            carregarRebanhos();
-            configurarFiltros();
-        });
-
-        function carregarRebanhos(filtros = {}) {
-            const tbody = document.getElementById('tbodyRebanhos');
-            tbody.innerHTML = '';
-
-            let rebanhosFiltrados = rebanhos.filter(rebanho => {
-                if (filtros.codigo && !rebanho.codigo.includes(filtros.codigo)) return false;
-                if (filtros.proprietario && !rebanho.proprietario.toLowerCase().includes(filtros.proprietario.toLowerCase())) return false;
-                if (filtros.especie && rebanho.especie !== filtros.especie) return false;
-                if (filtros.situacao && rebanho.situacao !== filtros.situacao) return false;
-                return true;
-            });
-
-            if (rebanhosFiltrados.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhum rebanho encontrado</td></tr>';
-                return;
-            }
-
-            rebanhosFiltrados.forEach(rebanho => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${rebanho.codigo}</td>
-                    <td>${rebanho.proprietario}</td>
-                    <td>${rebanho.cpfCnpj}</td>
-                    <td>${rebanho.especie}</td>
-                    <td>${rebanho.quantidade}</td>
-                    <td><span class="status-${rebanho.situacao.toLowerCase().replace(' ', '-')}">${rebanho.situacao}</span></td>
-                    <td>${formatarData(rebanho.dataCadastro)}</td>
-                    <td>
-                        <button class="file-action" onclick="editarRebanho(${rebanho.id})">Editar</button>
-                        <button class="file-action delete" onclick="solicitarExclusao(${rebanho.id})">Excluir</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function configurarFiltros() {
-            const inputs = ['filterCodigo', 'filterProprietario', 'filterEspecie', 'filterSituacao'];
-            inputs.forEach(id => {
-                document.getElementById(id).addEventListener('input', aplicarFiltros);
-            });
-        }
-
-        function aplicarFiltros() {
-            const filtros = {
-                codigo: document.getElementById('filterCodigo').value,
-                proprietario: document.getElementById('filterProprietario').value,
-                especie: document.getElementById('filterEspecie').value,
-                situacao: document.getElementById('filterSituacao').value
-            };
-            carregarRebanhos(filtros);
-        }
-
-        function limparFiltros() {
-            document.getElementById('filterCodigo').value = '';
-            document.getElementById('filterProprietario').value = '';
-            document.getElementById('filterEspecie').value = '';
-            document.getElementById('filterSituacao').value = '';
-            carregarRebanhos();
-        }
-
-        function novoCadastro() {
-            rebanhoEditando = null;
-            document.getElementById('formTitle').textContent = 'Cadastrar Novo Rebanho';
-            document.getElementById('btnExcluir').style.display = 'none';
-            document.getElementById('btnAddMovimentacao').disabled = true;
-            
-            // Limpar formulário
-            document.getElementById('codigoRebanho').value = '';
-            document.getElementById('nomeProprietario').value = '';
-            document.getElementById('cpfCnpj').value = '';
-            document.getElementById('especieAnimal').value = '';
-            document.getElementById('quantidadeAnimais').value = '';
-            document.getElementById('situacaoRebanho').value = 'Ativo';
-            
-            document.getElementById('tbodyMovimentacoes').innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhuma movimentação cadastrada.</td></tr>';
-            arquivosAnexados = [];
-            atualizarListaArquivos();
-            
-            document.getElementById('formRebanho').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('formRebanho').offsetTop, behavior: 'smooth' });
-        }
-
-        function editarRebanho(id) {
-            const rebanho = rebanhos.find(r => r.id === id);
-            if (!rebanho) return;
-
-            rebanhoEditando = rebanho;
-            document.getElementById('formTitle').textContent = 'Editar Rebanho';
-            document.getElementById('btnExcluir').style.display = 'block';
-            document.getElementById('btnAddMovimentacao').disabled = false;
-            
-            // Preencher formulário
-            document.getElementById('codigoRebanho').value = rebanho.codigo;
-            document.getElementById('nomeProprietario').value = rebanho.proprietario;
-            document.getElementById('cpfCnpj').value = rebanho.cpfCnpj;
-            document.getElementById('especieAnimal').value = rebanho.especie;
-            document.getElementById('quantidadeAnimais').value = rebanho.quantidade;
-            document.getElementById('situacaoRebanho').value = rebanho.situacao;
-            
-            document.getElementById('formRebanho').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('formRebanho').offsetTop, behavior: 'smooth' });
-        }
-
-        function validarFormulario() {
-            let valido = true;
-            const errors = document.querySelectorAll('.error');
-            errors.forEach(error => error.style.display = 'none');
-
-            // Validar nome do proprietário
-            const nome = document.getElementById('nomeProprietario').value;
-            if (!nome.trim()) {
-                document.getElementById('errorProprietario').style.display = 'block';
-                valido = false;
-            }
-
-            // Validar CPF/CNPJ
-            const cpfCnpj = document.getElementById('cpfCnpj').value;
-            if (!validarCpfCnpj(cpfCnpj)) {
-                document.getElementById('errorCpfCnpj').style.display = 'block';
-                valido = false;
-            }
-
-            // Validar espécie
-            const especie = document.getElementById('especieAnimal').value;
-            if (!especie) {
-                document.getElementById('errorEspecie').style.display = 'block';
-                valido = false;
-            }
-
-            // Validar quantidade
-            const quantidade = parseInt(document.getElementById('quantidadeAnimais').value);
-            if (isNaN(quantidade) || quantidade < 1 || quantidade > 10000) {
-                document.getElementById('errorQuantidade').style.display = 'block';
-                valido = false;
-            }
-
-            return valido;
-        }
-
-        function validarCpfCnpj(cpfCnpj) {
-            // Simulação de validação - em produção usar biblioteca específica
-            const limpo = cpfCnpj.replace(/\D/g, '');
-            return limpo.length === 11 || limpo.length === 14;
-        }
-
-        function salvarRebanho() {
-            if (!validarFormulario()) {
-                alert('Por favor, corrija os erros antes de salvar.');
-                return;
-            }
-
-            const dados = {
-                proprietario: document.getElementById('nomeProprietario').value,
-                cpfCnpj: document.getElementById('cpfCnpj').value,
-                especie: document.getElementById('especieAnimal').value,
-                quantidade: parseInt(document.getElementById('quantidadeAnimais').value),
-                situacao: document.getElementById('situacaoRebanho').value,
-                dataCadastro: new Date().toISOString().split('T')[0]
-            };
-
-            if (rebanhoEditando) {
-                // Edição
-                Object.assign(rebanhoEditando, dados);
-                alert('Rebanho atualizado com sucesso!');
-            } else {
-                // Novo cadastro
-                dados.id = rebanhos.length + 1;
-                dados.codigo = `REB-2024-${String(dados.id).padStart(5, '0')}`;
-                rebanhos.push(dados);
-                alert('Rebanho cadastrado com sucesso!');
-            }
-
-            carregarRebanhos();
-            cancelarEdicao();
-        }
-
-        function cancelarEdicao() {
-            document.getElementById('formRebanho').style.display = 'none';
-            rebanhoEditando = null;
-        }
-
-        function solicitarExclusao(id) {
-            const rebanho = rebanhos.find(r => r.id === id);
-            if (!rebanho) return;
-
-            if (rebanho.situacao === 'Sob Fiscalização') {
-                alert('Não é possível excluir um rebanho sob fiscalização.');
-                return;
-            }
-
-            acaoPendente = { tipo: 'excluir', id: id };
-            document.getElementById('modalMessage').textContent = `Confirma a exclusão do rebanho ${rebanho.codigo}?`;
-            document.getElementById('modalConfirmacao').style.display = 'block';
-        }
-
-        function confirmarAcao() {
-            if (acaoPendente && acaoPendente.tipo === 'excluir') {
-                rebanhos = rebanhos.filter(r => r.id !== acaoPendente.id);
-                carregarRebanhos();
-                alert('Rebanho excluído com sucesso!');
-            }
-            fecharModal();
-        }
-
-        function fecharModal() {
-            document.getElementById('modalConfirmacao').style.display = 'none';
-            acaoPendente = null;
-        }
-
-        function adicionarMovimentacao() {
-            if (!rebanhoEditando) return;
-            alert('Funcionalidade de adicionar movimentação será implementada aqui.');
-        }
-
-        function adicionarArquivos(files) {
-            Array.from(files).forEach(file => {
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`Arquivo ${file.name} excede o limite de 5MB`);
-                    return;
-                }
-
-                const extensoesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
-                const extensao = file.name.split('.').pop().toLowerCase();
-                if (!extensoesPermitidas.includes(extensao)) {
-                    alert(`Tipo de arquivo não permitido: ${file.name}`);
-                    return;
-                }
-
-                if (arquivosAnexados.length >= 10) {
-                    alert('Limite máximo de 10 arquivos atingido');
-                    return;
-                }
-
-                arquivosAnexados.push({
-                    nome: file.name,
-                    tamanho: file.size,
-                    data: new Date().toLocaleDateString()
-                });
-            });
-
-            atualizarListaArquivos();
-        }
-
-        function atualizarListaArquivos() {
-            const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
-
-            if (arquivosAnexados.length === 0) {
-                fileList.innerHTML = '<li style="text-align: center; color: #7f8c8d;">Nenhum arquivo anexado</li>';
-                return;
-            }
-
-            arquivosAnexados.forEach((arquivo, index) => {
-                const li = document.createElement('li');
-                li.className = 'file-item';
-                li.innerHTML = `
-                    <div>
-                        <strong>${arquivo.nome}</strong><br>
-                        <small>${formatarTamanho(arquivo.tamanho)} - ${arquivo.data}</small>
-                    </div>
-                    <div class="file-actions">
-                        <button class="file-action" onclick="visualizarArquivo(${index})">Visualizar</button>
-                        <button class="file-action delete" onclick="removerArquivo(${index})">Excluir</button>
-                    </div>
-                `;
-                fileList.appendChild(li);
-            });
-        }
-
-        function visualizarArquivo(index) {
-            alert(`Visualizando arquivo: ${arquivosAnexados[index].nome}`);
-        }
-
-        function removerArquivo(index) {
-            arquivosAnexados.splice(index, 1);
-            atualizarListaArquivos();
-        }
-
-        function formatarData(data) {
-            return new Date(data).toLocaleDateString('pt-BR');
-        }
-
-        function formatarTamanho(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-    </script>
 </body>
 </html>

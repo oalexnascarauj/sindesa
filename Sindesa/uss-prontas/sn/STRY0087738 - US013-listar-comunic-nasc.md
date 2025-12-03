@@ -1,5 +1,5 @@
 # US013 - Listar Comunicação de Nascimentos
-#### STRY0087738
+#### STRY0087738 ok
 
 ## DESCRIÇÃO
 

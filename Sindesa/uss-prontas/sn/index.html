@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindesa - Histórias de Usuário (User Stories)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            width: 300px;
+            font-size: 1em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .filter-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            color: white;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: left 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .story-card:hover::before {
+            left: 0;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .story-id {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .story-number {
+            background: #f0f2f5;
+            color: #667eea;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .story-title {
+            font-size: 1.4em;
+            color: #333;
+            margin: 15px 0;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .story-description {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            min-height: 60px;
+        }
+
+        .story-meta {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            display: inline-block;
+            background: #f0f2f5;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .story-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .story-link:hover {
+            color: #764ba2;
+            transform: translateX(5px);
+        }
+
+        .story-link::after {
+            content: ' →';
+            transition: all 0.3s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            opacity: 0.8;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .badge-pronto {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Sindesa - User Stories</h1>
+            <p>Sistema de Defesa Agropecuária - Documentação de Histórias de Usuário</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number" id="totalStories">15</span>
+                <span class="stat-label">Histórias Totais</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">US001-US015</span>
+                <span class="stat-label">Range</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Documentadas</span>
+            </div>
+        </div>
+
+        <div class="search-filter">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="🔍 Buscar por título, US ou palavra-chave..."
+            >
+            <button class="filter-btn active" onclick="filterByCategory('todos')">Todas</button>
+            <button class="filter-btn" onclick="filterByCategory('evento')">Eventos</button>
+            <button class="filter-btn" onclick="filterByCategory('comunicacao')">Comunicação</button>
+            <button class="filter-btn" onclick="filterByCategory('especie')">Espécie</button>
+        </div>
+
+        <div class="stories-grid" id="storiesGrid"></div>
+
+        <div class="footer">
+            <p>📄 Documentação oficial do projeto Sindesa - Sistema de Defesa Agropecuária</p>
+            <p>Última atualização: Dezembro 2025</p>
+        </div>
+    </div>
+
+    <script>
+        const stories = [
+            {
+                id: 'STRY0087120',
+                us: 'US001',
+                title: 'Incluir Evento Agropecuário',
+                description: 'Cadastrar e gerenciar eventos agropecuários no sistema, incluindo todas as informações obrigatórias (dados do evento, questionários, exigências sanitárias, anexos e documentação fiscal)',
+                category: 'evento',
+                file: 'STRY0087120 - US001-incluir-eventos-agropecuarios.md'
+            },
+            {
+                id: 'STRY0087153',
+                us: 'US002',
+                title: 'Incluir Receituário de Brucelose',
+                description: 'Gerenciar receituários de brucelose com dados do veterinário, produtor, estabelecimento e composição',
+                category: 'receita',
+                file: 'STRY0087153 - US002-incluir-receituario-brucelose.md'
+            },
+            {
+                id: 'STRY0087163',
+                us: 'US004',
+                title: 'Incluir Espécie - Regra de Fundos',
+                description: 'Configurar regras de fundos para espécies, gerenciando receitas, sub-receitas e valores',
+                category: 'especie',
+                file: 'STRY0087163 - US004-incluir-especie-regra-fundos.md'
+            },
+            {
+                id: 'STRY0087165',
+                us: 'US005',
+                title: 'Listar Estabelecimentos Rurais',
+                description: 'Listar e consultar todos os estabelecimentos rurais cadastrados no sistema com filtros e busca avançada',
+                category: 'estabelecimento',
+                file: 'STRY0087165 - US005-listar-estabelecimentos-rurais.md'
+            },
+            {
+                id: 'STRY0087224',
+                us: 'US006',
+                title: 'Listar Eventos Agropecuários',
+                description: 'Visualizar e filtrar lista completa de eventos agropecuários com status e informações principais',
+                category: 'evento',
+                file: 'STRY0087224 - US006-listar-eventos-agropecuarios.md'
+            },
+            {
+                id: 'STRY0087412',
+                us: 'US007',
+                title: 'Incluir Comunicação de Atualização de Estoque',
+                description: 'Registrar comunicação de atualização do estoque atual de rebanho com rastreabilidade',
+                category: 'comunicacao',
+                file: 'STRY0087412 - US007-incluir-comun-atual-estoq-rebanho.md'
+            },
+            {
+                id: 'STRY0087415',
+                us: 'US008',
+                title: 'Visualizar Comunicação de Estoque',
+                description: 'Analisar e visualizar comunicações de estoque de rebanho com histórico e detalhes',
+                category: 'comunicacao',
+                file: 'STRY0087415 - US008-visualizar-comunic-atual-estoq-rebanho.md'
+            },
+            {
+                id: 'STRY0087416',
+                us: 'US009',
+                title: 'Incluir Comunicação de Vacinação',
+                description: 'Registrar comunicações de vacinação de animais com dados da vacina e lote',
+                category: 'comunicacao',
+                file: 'STRY0087416 - US009-incluir-comunic-vacina.md'
+            },
+            {
+                id: 'STRY0087615',
+                us: 'US010',
+                title: 'Incluir Comunicação de Nascimentos (Regras de Carência)',
+                description: 'Registrar nascimentos de animais respeitando regras de carência e requisitos sanitários',
+                category: 'comunicacao',
+                file: 'STRY0087615 - US010-incluir-comunic-nasc.md'
+            },
+            {
+                id: 'STRY0087686',
+                us: 'US011',
+                title: 'Emitir Guia de Trânsito Animal (GTA) - Aba Taxas',
+                description: 'Controlar valores de FETHAB, FESA e Taxa de Defesa Sanitária em emissão de GTA',
+                category: 'gta',
+                file: 'STRY0087686 - US011-emitir-guia-gta-aba-taxas.md'
+            },
+            {
+                id: 'STRY0087687',
+                us: 'US012',
+                title: 'Analisar Comunicação de Nascimentos',
+                description: 'Aprovar ou reprovar comunicações de nascimento com justificativa e análise',
+                category: 'comunicacao',
+                file: 'STRY0087687 - US012-visualizar-comunic-nasc.md'
+            },
+            {
+                id: 'STRY0087738',
+                us: 'US013',
+                title: 'Listar Comunicação de Nascimentos',
+                description: 'Consultar, gerenciar e controlar comunicações de nascimentos com status e histórico',
+                category: 'comunicacao',
+                file: 'STRY0087738 - US013-listar-comunic-nasc.md'
+            },
+            {
+                id: 'STRY0087766',
+                us: 'US014',
+                title: 'Incluir Comunicação de Evolução/Transferência',
+                description: 'Registrar o crescimento e movimentação dos rebanhos com rastreabilidade completa',
+                category: 'comunicacao',
+                file: 'STRY0087766 - US014-incluir-evolucao-aprov-reprov-regras-carencia.md'
+            },
+            {
+                id: 'STRY0087925',
+                us: 'US015',
+                title: 'Incluir Espécie - Config de Carência',
+                description: 'Configurar carência para comunicação de nascimento e evolução por espécie',
+                category: 'especie',
+                file: 'STRY0087925 - US015-incluir-especie-config-carencia.md'
+            },
+            {
+                id: 'US016',
+                us: 'US016',
+                title: 'Incluir Espécie - Tabela de Faixa Etária',
+                description: 'Definir faixas etárias e estratificações para espécies animais',
+                category: 'especie',
+                file: 'US016-incluir-especie-tabela-faixa-et.md'
+            }
+        ];
+
+        const categoryColors = {
+            'evento': '#FF6B6B',
+            'receita': '#4ECDC4',
+            'especie': '#45B7D1',
+            'estabelecimento': '#96CEB4',
+            'comunicacao': '#FFEAA7',
+            'gta': '#DDA15E'
+        };
+
+        const categoryLabels = {
+            'evento': '🎪 Evento',
+            'receita': '📋 Receita',
+            'especie': '🐄 Espécie',
+            'estabelecimento': '🏚️ Estabelecimento',
+            'comunicacao': '📢 Comunicação',
+            'gta': '🚚 GTA'
+        };
+
+        let currentFilter = 'todos';
+
+        function renderStories(storiesToRender) {
+            const grid = document.getElementById('storiesGrid');
+            
+            if (storiesToRender.length === 0) {
+                grid.innerHTML = '<div class="no-results">Nenhuma história encontrada para os critérios de busca</div>';
+                return;
+            }
+
+            grid.innerHTML = storiesToRender.map(story => `
+                <div class="story-card" onclick="openStory('${story.file}')">
+                    <div class="story-header">
+                        <span class="story-id">${story.id}</span>
+                        <span class="story-number">${story.us}</span>
+                    </div>
+                    <h2 class="story-title">${story.title}</h2>
+                    <p class="story-description">${story.description}</p>
+                    <div class="story-meta">
+                        <span class="meta-tag" style="background-color: ${categoryColors[story.category]}22; color: ${categoryColors[story.category]}">
+                            ${categoryLabels[story.category]}
+                        </span>
+                    </div>
+                    <span class="badge-status badge-pronto">✓ Documentada</span>
+                    <a class="story-link">Ver Detalhes</a>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            updateFilters();
+        }
+
+        function updateFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = stories.filter(story => {
+                const matchesSearch = story.title.toLowerCase().includes(searchTerm) ||
+                                    story.us.toLowerCase().includes(searchTerm) ||
+                                    story.description.toLowerCase().includes(searchTerm) ||
+                                    story.id.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = currentFilter === 'todos' || story.category === currentFilter;
+                
+                return matchesSearch && matchesCategory;
+            });
+
+            renderStories(filtered);
+
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event?.target?.classList.add('active');
+        }
+
+        function openStory(filename) {
+            window.location.href = filename;
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', updateFilters);
+
+        // Initial render
+        renderStories(stories);
+
+        // Update stats
+        document.getElementById('totalStories').textContent = stories.length;
+    </script>
+</body>
+</html>

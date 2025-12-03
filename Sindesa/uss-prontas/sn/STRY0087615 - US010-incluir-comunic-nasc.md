@@ -1,5 +1,5 @@
 # US010 - Incluir Comunicação de Nascimentos - Regras de Carência
-#### STRY0087615
+#### STRY0087615 solicitar confirmação
 
 ## DESCRIÇÃO
 

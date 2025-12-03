@@ -1,5 +1,5 @@
 # US009 - Incluir Comunicação de Vacinação
-#### STRY0087416
+#### STRY0087416 Solicitar confirmação
 
 ## DESCRIÇÃO
 

@@ -1,5 +1,5 @@
 # US002 - Incluir Receituário de Brucelose
-#### STRY0087153
+#### STRY0087153 ok
 
 ## DESCRIÇÃO
 

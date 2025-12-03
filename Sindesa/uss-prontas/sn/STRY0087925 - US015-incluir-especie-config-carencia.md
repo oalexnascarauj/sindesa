@@ -1,5 +1,5 @@
 # US015 - Incluir Espécie - Carência para comunicação de Nascimento e Evolução
-#### STRY0087925
+#### STRY0087925 ok
 
 ## DESCRIÇÃO
 

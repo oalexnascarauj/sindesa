@@ -1,5 +1,5 @@
 # US004 - Incluir espécie em Regras de Fundos
-#### STRY0087163
+#### STRY0087163 ok
 
 ## DESCRIÇÃO
 

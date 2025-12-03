@@ -1,5 +1,5 @@
 # US007 - Incluir Comunicação de Atualização de Estoque de Rebanho
-#### STRY0087412
+#### STRY0087412 ok
 
 ## DESCRIÇÃO
 
@@ -50,3 +50,4 @@
 ## 4. Requisitos considerados:
 - **Bloquear** inclusão de Comunicação de Estoque para usuários "produtor" em campanhas com situação "Encerrada" ou "Inativa"
 - **Bloquear** inclusão de Comunicação de Estoque para usuários "veterinario" em campanhas com situação "Encerrada" ou "Inativa"
+- **Campanha de atualização de estoque** não permitir mais de uma comunicação por exploração por campanha.

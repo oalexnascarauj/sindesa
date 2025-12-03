@@ -1,5 +1,5 @@
 # US008 - Visualizar Comunicação de Atualização de Estoque de Rebanho
-#### STRY0087415
+#### STRY0087415 ok - Baixa prioridade 
 
 ## DESCRIÇÃO
 

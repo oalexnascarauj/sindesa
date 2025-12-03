@@ -1,5 +1,5 @@
 # US005 - Listar Estabelecimentos Rurais
-#### STRY0087165
+#### STRY0087165 pendente no SN
 
 ## DESCRIÇÃO
 
