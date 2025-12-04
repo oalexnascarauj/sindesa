@@ -1,181 +1,279 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentação de Regras de Negócio Agropecuário</title>
+Compreendo perfeitamente sua frustração. A notação BPMN deve ser clara e aderente aos padrões (círculos para eventos, retângulos para tarefas, losangos para *gateways*).
+
+**Limitação:** Como assistente de texto, não consigo gerar arquivos binários como PNGs dinamicamente. No entanto, posso fornecer a estrutura BPMN completa e detalhada em um *snippet* HTML/CSS robusto, garantindo a representação geométrica correta dos elementos do processo.
+
+A seguir, está o fluxo do processo em BPMN, dividido em dois Pools (Emissão e Entrada Interestadual), contendo todos os detalhes e regras de negócio exigidos nas fontes.
+
+```html
+<div style="font-family: 'Arial', sans-serif; background-color: #f0f4f7; padding: 20px; border-radius: 12px; max-width: 1200px; margin: 20px auto; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+
+    <h2 style="color: #004d99; text-align: center; border-bottom: 2px solid #004d99; padding-bottom: 10px;">
+        Processo Completo: Emissão e Entrada da Guia de Trânsito Animal (GTA)
+    </h2>
+    <p style="text-align: center; color: #6c757d; font-style: italic;">Representação BPMN em HTML/CSS estruturada.</p>
+
+    <!-- Definição de estilos BPMN -->
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #27ae60;
-            --accent-color: #e67e22;
-            --light-bg: #ecf0f1;
-            --text-color: #333;
+        .bpmn-pool { border: 4px solid #004d99; border-radius: 10px; margin-bottom: 30px; }
+        .bpmn-lane { border-left: 3px solid #6c757d; margin: 10px; padding: 10px; background-color: #ffffff; border-radius: 6px; }
+        .bpmn-start, .bpmn-end, .bpmn-event {
+            width: 45px; height: 45px; border-radius: 50%; border: 3px solid; text-align: center; line-height: 39px; font-size: 1.2em; margin: 15px auto;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
+        .bpmn-start { background-color: #d4edda; border-color: #155724; color: #155724; }
+        .bpmn-end { background-color: #f8d7da; border-color: #721c24; color: #721c24; border-width: 6px; } /* End event thick border */
+        .bpmn-task {
+            min-height: 50px; border-radius: 5px; padding: 10px; margin: 10px 0; border: 1px solid #007bff; background-color: #e6f7ff;
+            text-align: left; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 2rem 0;
+        .bpmn-sub-task { border-left: 5px solid #004d99; background-color: #f0f8ff; padding: 10px; margin-top: 10px; }
+        .bpmn-subprocess {
+            border: 2px solid #004d99; padding: 10px; margin: 15px 0; border-radius: 8px; background-color: #f0f4f7;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 20px;
+        .bpmn-gateway {
+            width: 55px; height: 55px; border: 3px solid #ffc107; background-color: #fff3cd; margin: 15px auto; transform: rotate(45deg);
         }
-
-        h1 { margin: 0; font-size: 2.5rem; }
-        h2 { 
-            color: var(--primary-color); 
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 10px;
-            margin-top: 40px;
-        }
-        h3 { color: var(--secondary-color); margin-top: 25px; }
-
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--secondary-color);
-        }
-
-        .card.fiscal { border-left-color: #c0392b; }
-        .card.event { border-left-color: #f39c12; }
-
-        ul { padding-left: 20px; }
-        li { margin-bottom: 10px; }
-
-        .tag {
-            display: inline-block;
-            background: var(--light-bg);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            color: #7f8c8d;
-            font-family: monospace;
-            margin-left: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: var(--primary-color);
-            color: white;
-            margin-top: 40px;
-            font-size: 0.9rem;
-        }
+        .bpmn-gateway-label { transform: rotate(-45deg); font-size: 0.8em; font-weight: bold; margin-top: 15px; text-align: center; }
+        .flow-arrow { text-align: center; font-size: 1.2em; color: #555; }
+        .bpmn-label { font-size: 0.9em; text-align: center; margin-top: -10px; margin-bottom: 10px; }
     </style>
-</head>
-<body>
 
-    <header>
-        <div class="container">
-            <h1>Sistema de Gestão Agropecuária</h1>
-            <p>Documentação de Processos e Regras de Negócio</p>
+    <!-- POOL 1: EMISSÃO E MANUTENÇÃO DE GTA -->
+    <div class="bpmn-pool">
+        <div style="background-color: #004d99; color: white; padding: 12px; font-weight: bold; text-align: center; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+            POOL: PROCESSO DE EMISSÃO DA GTA (SINDESA)
         </div>
-    </header>
 
-    <div class="container">
-        
-        <section id="intro">
-            <p>Este documento consolida as regras de negócio extraídas dos manuais operacionais e relatórios do sistema. O ecossistema abrange desde a movimentação animal até à fiscalização sanitária.</p>
-        </section>
-
-        <section id="transito">
-            <h2>1. Trânsito e Movimentação</h2>
-            <p>Regras referentes ao transporte legal de animais e subprodutos entre propriedades, eventos e indústrias.</p>
-            
-            <div class="card">
-                <h3>Emissão de Documentos</h3>
-                <ul>
-                    <li><strong>Guia de Trânsito Animal (GTA):</strong> Obrigatória para qualquer movimentação de animais vivos. O sistema deve validar a origem, destino e finalidade antes da emissão. <span class="tag">Emitir_Guia_Transito_Animal_GTA_Geral.FUN</span></li>
-                    <li><strong>Guia de Trânsito de Subprodutos (GTS):</strong> Utilizada para o transporte de materiais derivados (não vivos), seguindo lógica similar de rastreabilidade. <span class="tag">Guia_de_Transito_de_Subprodutos_GTS.FUN</span></li>
-                    <li><strong>Segunda Via:</strong> Permitida a reimpressão de documentos válidos em caso de perda ou dano, mantendo os dados originais. <span class="tag">Emitir_Segunda_Via_GTA.FUN</span></li>
-                </ul>
+        <!-- LANE: INTERAÇÃO USUÁRIO -->
+        <div class="bpmn-lane">
+            <div style="background-color: #e9ecef; padding: 6px; font-weight: bold; border-radius: 4px; margin-bottom: 15px;">
+                LANE: Usuário (Input e Confirmação de Dados)
             </div>
 
-            <div class="card">
-                <h3>Gestão Administrativa</h3>
-                <ul>
-                    <li><strong>Administração de GTA:</strong> Funcionalidades para consulta, cancelamento (dentro do prazo legal) e gestão das guias emitidas pelo produtor ou técnico. <span class="tag">Administrar_GTA.FUN</span></li>
-                </ul>
+            <div class="bpmn-start">
+                &#9679;
             </div>
-        </section>
+            <div class="bpmn-label">Início</div>
 
-        <section id="rebanho">
-            <h2>2. Gestão de Rebanho e Sanidade</h2>
-            <p>Processos para manutenção do inventário animal e cumprimento de obrigações sanitárias.</p>
-
-            <div class="card">
-                <h3>Controle de Estoque</h3>
-                <ul>
-                    <li><strong>Atualização de Saldo:</strong> O produtor deve comunicar alterações no rebanho para manter o saldo do sistema sincronizado com a realidade física da propriedade. <span class="tag">Comunicacao_Atualizacao_Estoque_Rebanho.FUN</span></li>
-                    <li><strong>Relatórios de Conferência:</strong> Geração de extratos para visualização do saldo atual por espécie e categoria animal. <span class="tag">Relatorio_de_Comunicacao_de_Estoque_de_Rebanho.FUN</span></li>
-                </ul>
+            <div class="bpmn-task">
+                <strong>Pesquisa e Ações Iniciais</strong>
+                <div style="font-size: 0.8em;">Filtros: Nº GTA, Espécie, Finalidade, Situação (EMITIDA, CANCELADA, RECEBIDA NO DESTINO). Ações: Visualizar (apenas Servidor INDEA), Imprimir/2ª Via, Cancelar.</div>
             </div>
 
-            <div class="card">
-                <h3>Sanidade</h3>
-                <ul>
-                    <li><strong>Declaração de Vacinação:</strong> Obrigatória durante campanhas oficiais. O sistema deve registrar a vacina, data e lote, vinculando aos animais imunizados. <span class="tag">Comunicacao_Vacinacao.FUN</span></li>
-                </ul>
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-gateway"><div class="bpmn-gateway-label">Ação?</div></div>
+            <div style="display: flex; justify-content: space-around; font-size: 0.9em;">
+                <span style="width: 30%; text-align: center;">Entrada fora MT &#8594; (Ver Pool 2)</span>
+                <span style="width: 30%; text-align: center;">Incluir &#8595;</span>
             </div>
-        </section>
 
-        <section id="eventos">
-            <h2>3. Eventos Agropecuários</h2>
-            <p>Regras específicas para aglomerações de animais (feiras, leilões, exposições).</p>
+            <div class="flow-arrow">↓</div>
 
-            <div class="card event">
-                <h3>Fluxo do Evento</h3>
-                <ul>
-                    <li><strong>Controle de Entrada:</strong> Registro obrigatório de todos os animais que adentram o recinto, validado via GTA de entrada. <span class="tag">Relatorio_Entrada_Animais_Evento_Agropecuario.REL</span></li>
-                    <li><strong>Ocorrências Internas:</strong> Deve ser possível registrar nascimentos e mortes ocorridos durante o evento, ajustando o saldo local.
-                        <ul>
-                            <li><span class="tag">Comunicar_Nascimento_de_Animais_Evento_Agro.FUN</span></li>
-                            <li><span class="tag">Comunicar_Morte_de_Animais_Evento_Agro.FUN</span></li>
+            <!-- SUBPROCESSO 2: INCLUSÃO DA GTA (4 ABAS) -->
+            <div class="bpmn-subprocess">
+                <div style="color: #004d99; font-weight: bold; margin-bottom: 10px;">Subprocesso: Lançamento e Validação da GTA (Abas 2.1 - 2.4)</div>
+
+                <!-- TAREFA 2.1: ORIGEM/DESTINO -->
+                <div class="bpmn-task" style="border-color: #e6b800; background-color: #fff8d4;">
+                    <strong>2.1. ABA ORIGEM/DESTINO</strong>
+                    <div class="detail-box">
+                        <ul style="font-size: 0.8em;">
+                            <li>**Habilitação:** Usuário deve ter Qualificação "HABILITAÇÃO PARA EMISSÃO DE GTA" ATIVA.</li>
+                            <li>**Bloqueios:** Impede se Estabelecimento Origem tiver **Interdição ATIVA** (SAÍDA/ENTRADA E SAÍDA) ou Exploração Origem tiver **Bloqueio ATIVO**.</li>
+                            <li>**Alerta:** Apresenta Noventena Válida na Origem (em vermelho) se Finalidade ≠ ABATE.</li>
+                            <li>**Destino:** Se Estado Destino ≠ MT, busca Produtor/Estabelecimento na PGA/MAPA.</li>
                         </ul>
-                    </li>
-                    <li><strong>Controle de Saída:</strong> Registro dos animais que deixam o evento, gerando base para novas GTAs de saída. <span class="tag">Relatorio_Saida_Animais_Evento_Agropecuario.REL</span></li>
-                    <li><strong>Encerramento:</strong> Processo formal para finalizar o evento no sistema, consolidando os dados. <span class="tag">Encerramento_de_Evento_Agropecuario.FUN</span></li>
-                </ul>
+                    </div>
+                </div>
+                <div class="flow-arrow">↓</div>
+
+                <div class="bpmn-gateway"><div class="bpmn-gateway-label">Origem?</div></div>
+                <div style="text-align: center; font-size: 0.8em;">
+                    <span style="display: inline-block; margin: 0 10px;">ESTABELECIMENTO &#8595;</span>
+                    <span style="display: inline-block; margin: 0 10px;">EVENTO/FRIGORÍFICO/REVENDA &#8595;</span>
+                </div>
+
+                <!-- TAREFA 2.2: GTAs DE ORIGEM (Condicional) -->
+                <div class="bpmn-task" style="border-color: #6f42c1; background-color: #f7f3ff;">
+                    <strong>2.2. ABA GTAs DE ORIGEM (Se Origem ≠ Estabelecimento)</strong>
+                    <div class="detail-box">
+                        <ul style="font-size: 0.8em;">
+                            <li>**Seleção:** Obrigatório selecionar GTAs de Entrada com status **"RECEBIDA NO DESTINO"** e saldo > 0.</li>
+                            <li>**Qtde Saída:** Lançada por Estratificação (Faixa Etária/Sexo/Lote), deve ser ≤ Saldo Atual.</li>
+                            <li>**Pré-validação:** Verifica se existe *Regra UPF INDEA* e *Regra UPF FETHAB* (se não encontradas, interrompe ou alerta).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flow-arrow">↓ (Convergência)</div>
+                
+                <!-- TAREFA 2.3: EXIGÊNCIAS SANITÁRIAS -->
+                <div class="bpmn-task" style="border-color: #1abc9c; background-color: #e8f8f5;">
+                    <strong>2.3. ABA EXIGÊNCIAS SANITÁRIAS</strong>
+                    <div class="detail-box">
+                        <ul style="font-size: 0.8em;">
+                            <li>**Qtde GTA's:** Define o número de guias a gerar (verifica Lote de Números).</li>
+                            <li>**Estratificação:** Lançamento por Tipo de Saldo (NORMAL, PARCIAL, TEMPORÁRIO). Validações: se há **pendência de vacinação**, só permite SALDO PARCIAL; se Finalidade é ABATE, prioriza SALDO TEMPORÁRIO.</li>
+                            <li>**Marcas:** Apenas Bovinos/Bubalinos.</li>
+                            <li>**Atestado de Exame:** Inclusão de laudos obrigatórios (ex: Brucelose). Valida Data de Validade e alerta se Resultado **POSITIVO**.</li>
+                            <li>**Certificação:** Lista registros ATIVOS (se Exploração ≠ SUBSISTÊNCIA).</li>
+                            <li>**Validação Crítica:** Verifica se Qtde lançada na Estratificação é consistente.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flow-arrow">↓</div>
+
+                <!-- TAREFA 2.4: TAXAS -->
+                <div class="bpmn-task" style="border-color: #e74c3c; background-color: #fdf2f3;">
+                    <strong>2.4. ABA TAXAS</strong>
+                    <div class="detail-box">
+                        <ul style="font-size: 0.8em;">
+                            <li>**Regra:** Se Origem = EVENTO/FRIGORÍFICO/REVENDA, ignora cálculos.</li>
+                            <li>**Cálculo:** Determina Valor Total INDEA, FETHAB, Fundos Privados (ALTERNATIVO/OBRIGATÓRIO) e Taxa Defesa.</li>
+                            <li>**Arrecadação:** Lançamento de DARs/Boletos. Validação de **Saldo Zerado** (Regra R007), **Quitação** (Regra R004) e **Compatibilidade Receita/Sub-Receita** (para Bovídeos, com consulta SEFAZ/Regra UPF).</li>
+                            <li>**Observações:** Concatena detalhes de Granja, GTAs de Origem e mensagens de Noventena/Bloco Comercial.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- Fim Subprocesso -->
+
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-task" style="background-color: #ccb3ff; border-color: #6f42c1;">
+                <strong>Ação: GERAR GTA</strong>
             </div>
-        </section>
 
-        <section id="fiscalizacao">
-            <h2>4. Fiscalização e Controle</h2>
-            <p>Ferramentas para órgãos reguladores monitorarem o cumprimento das normas.</p>
+            <div class="flow-arrow">↓</div>
 
-            <div class="card fiscal">
-                <h3>Monitoramento e Auditoria</h3>
-                <ul>
-                    <li><strong>Controle de Frigoríficos:</strong> Relatório específico listando as GTAs recebidas por unidades de abate, cruzando dados de transporte com abate efetivo. <span class="tag">Relatório_Lista_GTA_Frigorifico.REL</span></li>
-                    <li><strong>Gestão de Inadimplentes:</strong> Identificação de produtores com pendências (sanitárias, cadastrais ou financeiras) que impedem movimentações. <span class="tag">Relatorio_inadimplentes.REL</span></li>
-                    <li><strong>Auditoria por ULE:</strong> Relatório quantitativo de "Termos de Verificação" emitidos por Unidade Local de Execução, para métricas de produtividade e fiscalização. <span class="tag">Relatorio_de_Quantidade_de_Termo_de_Verificacao_por_ULE.FUN</span></li>
-                </ul>
+            <div class="bpmn-gateway"><div class="bpmn-gateway-label">Finalizar?</div></div>
+            <div style="text-align: center; font-size: 0.9em;">
+                <span style="display: inline-block; margin: 0 20px;">SIM &#8595;</span>
+                <span style="display: inline-block; margin: 0 20px;">NÃO &#8594; (Cancela Geração)</span>
             </div>
-        </section>
+            
+            <div class="flow-arrow">↓ (Se SIM)</div>
+        </div>
 
+        <!-- LANE: SISTEMA (Execução e Persistência) -->
+        <div class="bpmn-lane" style="border-left-color: #f39c12; background-color: #fff9e6;">
+            <div style="background-color: #f39c12; color: white; padding: 6px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; text-align: center;">
+                LANE: Sistema (Validações Finais e Persistência)
+            </div>
+
+            <div class="bpmn-task" style="border-color: #f39c12; background-color: #ffffff;">
+                <strong>7. Validações Finais de Lote e Pagamento</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>Verifica se **Valor Utilizado (DAR/Boleto) ≥ Valor Total Calculado** para todas as taxas/fundos não isentos.</li>
+                        <li>Verifica se há **Lote de Números de GTA** (ATIVO ou AGUARDANDO) suficiente.</li>
+                        <li>Se Origem=Destino E ≠ Granja, solicita confirmação para **Entrada Automática**.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-task" style="border-color: #f39c12; background-color: #fff9e6;">
+                <strong>8. Geração da GTA, Alocação de Número e Status</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>Gera GTAs sequencialmente (1 a N), alocando Nº GTA e Série do Lote ATIVO.</li>
+                        <li>**Status:** Se Entrada Automática (Origem=Destino e ≠ Granja): **RECEBIDA NO DESTINO**. Caso contrário: **EMITIDA**.</li>
+                        <li>Armazena dados estáticos (CPF/CNPJ, Nomes, Explorações) e do Emitente (Matrícula, CRMV, Unidade Expedidora).</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-task" style="border-color: #f39c12; background-color: #ffffff;">
+                <strong>9. Atualização de Estoque e Arrecadação</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>**Estoque Origem:** Subtrai Saldo da Exploração ou da GTA de Entrada, conforme Estratificação.</li>
+                        <li>**Estoque Destino (Apenas Entrada Automática):** Soma Saldo Destino e gera **Registro de Vacinação AUTOMÁTICO**.</li>
+                        <li>Consolida e utiliza o Valor Utilizado dos DARs/Boletos.</li>
+                        <li>**Impressão:** Imprime GTA (Anexo A0022).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-end">
+                &#10003;
+            </div>
+            <div class="bpmn-label" style="color: #721c24;">Fim do Processo de Emissão</div>
+        </div>
     </div>
 
-    <footer>
-        <p>Gerado automaticamente com base na análise dos ficheiros .FUN e .REL fornecidos.</p>
-    </footer>
+    <!-- POOL 2: ENTRADA DE GTA INTERESTADUAL (FORA DE MT) -->
+    <div class="bpmn-pool" style="border-color: #17a2b8;">
+        <div style="background-color: #17a2b8; color: white; padding: 12px; font-weight: bold; text-align: center; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+            POOL: Entrada de GTA vinda de fora de Mato Grosso (Realizar_Entrada_GTA_Vindo_de_Fora_do_Estado.FUN)
+        </div>
 
-</body>
-</html>
+        <div class="bpmn-lane">
+            <div style="background-color: #e9ecef; padding: 6px; font-weight: bold; border-radius: 4px; margin-bottom: 15px;">
+                LANE: Busca e Processamento de Entrada
+            </div>
+
+            <div class="bpmn-start" style="background-color: #e6f7ff; border-color: #17a2b8; color: #17a2b8;">
+                &#9679;
+            </div>
+            <div class="bpmn-label" style="color: #17a2b8;">Início: Acesso à "Entrada fora MT"</div>
+
+            <div class="bpmn-task" style="border-color: #17a2b8; background-color: #e6f7ff;">
+                <strong>1. Busca e Carregamento de Dados (Aba Origem/Destino)</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>Busca SINDESA (Situação = "EMITIDA"). Se não achou, busca PGA/MAPA.</li>
+                        <li>Se PGA/MAPA encontrada, carrega dados via XML (Origem, Destino, Meio de Transporte, Noventena).</li>
+                        <li>Se PGA Status = "04" (Cancelada), avança em modo Visualizar.</li>
+                        <li>**Alerta:** Se UF Origem NÃO habilitada para Bloco Comercial, informa que será gerada **Noventena no Destino**.</li>
+                        <li>Validações: Seleção de Estabelecimento/Exploração Destino (MT). Data Chegada ≤ Data Atual.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-task" style="border-color: #17a2b8; background-color: #e6f7ff;">
+                <strong>2. Entrada de Animais e Exigências Sanitárias</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>**Estratificação:** Usuário informa *Quantidade Chegada*.</li>
+                        <li>Se *Qtde Chegada* ≠ *Qtde Origem*, é obrigatório informar o **Motivo da Diferença** (MORTE, ROUBO, NÃO EMBARQUE).</li>
+                        <li>**Vacinas/Atestados:** Carrega automaticamente do PGA (se aplicável) e permite inclusão manual de outros.</li>
+                        <li>**Noventena Herdada:** Painel/Grid para Bloco Comercial onde Origem é habilitada, mas adquiriu animais de área não habilitada.</li>
+                        <li>**Validações Granja:** Se Destino é Granja Comercial, valida se a Exploração Destino tem registro ATIVO para Espécie (Aves/Suínos).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-gateway"><div class="bpmn-gateway-label">Confirmar?</div></div>
+            <div class="flow-arrow">↓ (Se SIM)</div>
+
+            <div class="bpmn-task" style="border-color: #dc3545; background-color: #f8d7da;">
+                <strong>3. Atualização de Estoque e Status Final</strong>
+                <div class="detail-box">
+                    <ul style="font-size: 0.8em;">
+                        <li>**Estoque:** Adiciona "Quantidade Chegada" ao **Saldo Normal** da Exploração Destino.</li>
+                        <li>**Vacinação:** Gera registro na TABELA DE VACINAÇÕES (Tipo Geração = "AUTOMÁTICO").</li>
+                        <li>**Noventena:** Gera Noventena (Tipo **AUTOMÁTICO**, Situação **VÁLIDA**) no Destino se Origem não for habilitada OU se GTA/PGA indicou noventena.</li>
+                        <li>**Bloqueio:** Se recebimento **em atraso** (Data Validade + Prazo de Carência) E não há bloqueio de ATRASO em aberto, gera **Bloqueio de SAÍDA DE GTA**.</li>
+                        <li>**Status Final:** Situação GTA = **"RECEBIDA NO DESTINO"** (ou CANCELADA se status PGA=04).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <div class="bpmn-end" style="border-color: #17a2b8; background-color: #e6f7ff;">
+                &#10003;
+            </div>
+            <div class="bpmn-label" style="color: #17a2b8;">Fim do Processo de Entrada</div>
+        </div>
+    </div>
+</div>
+```
