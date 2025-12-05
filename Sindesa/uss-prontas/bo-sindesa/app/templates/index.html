@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindesa Automation Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --terminal-bg: #000000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--text-primary) !important;
+            letter-spacing: -0.5px;
+        }
+
+        .card-custom {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .card-header-custom {
+            background-color: transparent;
+            border-bottom: 1px solid #334155;
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .form-control, .form-select {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: var(--text-primary);
+            padding: 0.75rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #0f172a;
+            border-color: var(--accent-color);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: none;
+            padding: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary-custom:disabled {
+            background: #475569;
+            transform: none;
+        }
+
+        /* Dashboard Stats */
+        .stat-card {
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Terminal */
+        .terminal-window {
+            background-color: var(--terminal-bg);
+            border-radius: 8px;
+            border: 1px solid #334155;
+            font-family: 'JetBrains Mono', monospace;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            background-color: #1e293b;
+            padding: 8px 16px;
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid #334155;
+            align-items: center;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #10b981; }
+
+        .terminal-body {
+            padding: 16px;
+            overflow-y: auto;
+            flex-grow: 1;
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+            border-left: 2px solid transparent;
+            padding-left: 8px;
+            word-wrap: break-word;
+        }
+
+        .log-info { border-left-color: #3b82f6; }
+        .log-success { color: var(--success-color); border-left-color: var(--success-color); }
+        .log-error { color: var(--error-color); border-left-color: var(--error-color); }
+        .log-timestamp { color: #64748b; font-size: 0.8em; margin-right: 8px; }
+
+        /* Progress */
+        .progress-container {
+            margin-top: 20px;
+        }
+        
+        .progress {
+            height: 8px;
+            background-color: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent-color), #60a5fa);
+            transition: width 0.5s ease;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-robot me-2"></i> SINDESA <span style="color: var(--accent-color)">AUTOMATION</span>
+            </a>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" id="systemStatus">
+                <i class="fa-solid fa-circle-check me-1"></i> System Ready
+            </span>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 py-4">
+        <div class="row g-4">
+            <!-- Left Panel: Configuration -->
+            <div class="col-lg-4">
+                <div class="card-custom h-100">
+                    <div class="card-header-custom">
+                        <i class="fa-solid fa-sliders text-primary"></i> Configuração da Execução
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="automationForm">
+                            <!-- Saved Users -->
+                            <div class="mb-4">
+                                <label for="saved_users" class="form-label">Perfil de Acesso</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-users"></i></span>
+                                    <select class="form-select" id="saved_users" onchange="fillCredentials()">
+                                        <option value="">Selecionar Usuário...</option>
+                                        {% for user in saved_users %}
+                                        <option value="{{ user.username }}" data-password="{{ user.password }}">{{ user.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Credentials -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-12">
+                                    <label for="username" class="form-label">Usuário ServiceNow</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="email@exemplo.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="password" class="form-label">Senha</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="save_credentials" name="save_credentials" value="true" checked>
+                                        <label class="form-check-label text-secondary" for="save_credentials">Salvar credenciais localmente</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-secondary opacity-25 my-4">
+
+                            <!-- Task Details -->
+                            <div class="mb-4">
+                                <label for="module" class="form-label">Módulo do Projeto</label>
+                                <select class="form-select" id="module" name="module" required>
+                                    <option value="" selected disabled>Selecione...</option>
+                                    <option value="ANIMAL">Módulo Animal</option>
+                                    <option value="MIGRAÇÃO">Módulo Migração</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="assigned_to" class="form-label">Atribuir Tarefa Para</label>
+                                <select class="form-select" id="assigned_to" name="assigned_to" required>
+                                    <option value="" selected disabled>Selecione o responsável...</option>
+                                    <option value="Alexandre Nascimento Araújo">Alexandre Nascimento Araújo</option>
+                                    <option value="Bruno Cruz">Bruno Cruz</option>
+                                    <option value="Caroline Soares Pinto Mendes">Caroline Soares Pinto Mendes</option>
+                                    <option value="Elder Fabricio Bilhalva Sousa Sousa">Elder Fabricio Bilhalva Sousa Sousa</option>
+                                    <option value="Emanuel Ribeiro Daubian Neto">Emanuel Ribeiro Daubian Neto</option>
+                                    <option value="Itrio Rodrigo Franca de Camargo">Itrio Rodrigo Franca de Camargo</option>
+                                    <option value="Jorge Guedes Alcoforado Neto">Jorge Guedes Alcoforado Neto</option>
+                                    <option value="Jose Correa de Souza Neto">Jose Correa de Souza Neto</option>
+                                    <option value="Leandro dos Anjos Passos">Leandro dos Anjos Passos</option>
+                                    <option value="Luiz Eduardo de Souza Nunes">Luiz Eduardo de Souza Nunes</option>
+                                    <option value="Manuela Callejas Pereira">Manuela Callejas Pereira</option>
+                                    <option value="Marcos Antonio dos Anjos">Marcos Antonio dos Anjos</option>
+                                    <option value="Raquel Regina Zampronio">Raquel Regina Zampronio</option>
+                                    <option value="Silvio Krynski Junior">Silvio Krynski Junior</option>
+                                    <option value="Welson de Oliveira Júnior">Welson de Oliveira Júnior</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary-custom w-100 mt-2" id="startBtn">
+                                <i class="fa-solid fa-rocket me-2"></i> INICIAR AUTOMAÇÃO
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Dashboard & Logs -->
+            <div class="col-lg-8">
+                <!-- Stats Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-value text-primary" id="stat-total">0</div>
+                            <div class="stat-label">Estórias Encontradas</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-value text-success" id="stat-success">0</div>
+                            <div class="stat-label">Tarefas Criadas</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-value text-danger" id="stat-error">0</div>
+                            <div class="stat-label">Erros</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="card-custom mb-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-secondary text-uppercase small fw-bold">Progresso da Execução</span>
+                            <span class="text-primary fw-bold" id="progress-text">0%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%" id="main-progress"></div>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <span class="badge bg-dark border border-secondary text-light p-2" id="current-action">
+                                <i class="fa-solid fa-pause me-2"></i> Aguardando início...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal -->
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                        <span class="ms-2 text-secondary small" style="opacity: 0.7">console output</span>
+                    </div>
+                    <div class="terminal-body" id="logArea">
+                        <div class="log-entry">> System initialized. Ready to start.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Credentials Logic
+        function fillCredentials() {
+            const select = document.getElementById('saved_users');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption.value) {
+                document.getElementById('username').value = selectedOption.value;
+                document.getElementById('password').value = selectedOption.getAttribute('data-password');
+            } else {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        }
+        
+        window.onload = function() {
+            const select = document.getElementById('saved_users');
+            if (select.options.length > 1) {
+                select.selectedIndex = 1;
+                fillCredentials();
+            }
+        }
+
+        // Automation Logic
+        document.getElementById('automationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('startBtn');
+            const logArea = document.getElementById('logArea');
+            const statusBadge = document.getElementById('systemStatus');
+            const currentAction = document.getElementById('current-action');
+            
+            // Reset Stats
+            document.getElementById('stat-total').innerText = '0';
+            document.getElementById('stat-success').innerText = '0';
+            document.getElementById('stat-error').innerText = '0';
+            document.getElementById('main-progress').style.width = '0%';
+            document.getElementById('progress-text').innerText = '0%';
+            
+            let successCount = 0;
+            let errorCount = 0;
+            let totalStories = 0;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> EXECUTANDO...';
+            
+            statusBadge.className = 'badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25';
+            statusBadge.innerHTML = '<i class="fa-solid fa-gears fa-spin me-1"></i> Processing';
+            
+            logArea.innerHTML = '';
+            addLog('Iniciando conexão com o servidor...', 'info');
+
+            const formData = new FormData(this);
+
+            fetch('/start', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa-solid fa-rocket me-2"></i> INICIAR AUTOMAÇÃO';
+                            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25';
+                            statusBadge.innerHTML = '<i class="fa-solid fa-check-double me-1"></i> Completed';
+                            currentAction.innerHTML = '<i class="fa-solid fa-flag-checkered me-2"></i> Processo Finalizado';
+                            return;
+                        }
+
+                        const chunk = decoder.decode(value);
+                        const lines = chunk.split('\n\n');
+                        
+                        lines.forEach(line => {
+                            if (line.startsWith('data: ')) {
+                                try {
+                                    const data = JSON.parse(line.substring(6));
+                                    
+                                    if (data.type === 'log') {
+                                        const msg = data.payload;
+                                        let type = 'info';
+                                        
+                                        // Update Stats based on log content
+                                        if (msg.includes('Encontrados') && msg.includes('arquivos')) {
+                                            const match = msg.match(/Encontrados (\d+)/);
+                                            if (match) {
+                                                totalStories = parseInt(match[1]);
+                                                document.getElementById('stat-total').innerText = totalStories;
+                                            }
+                                        }
+                                        
+                                        if (msg.includes('Tarefa criada com sucesso')) {
+                                            successCount++;
+                                            document.getElementById('stat-success').innerText = successCount;
+                                            type = 'success';
+                                        }
+                                        
+                                        if (msg.toLowerCase().includes('erro')) {
+                                            errorCount++;
+                                            document.getElementById('stat-error').innerText = errorCount;
+                                            type = 'error';
+                                        }
+
+                                        if (msg.includes('Processando estória')) {
+                                            // "Processando estória 1/3"
+                                            const match = msg.match(/(\d+)\/(\d+)/);
+                                            if (match) {
+                                                const current = parseInt(match[1]);
+                                                const total = parseInt(match[2]);
+                                                const pct = Math.round((current / total) * 100);
+                                                document.getElementById('main-progress').style.width = pct + '%';
+                                                document.getElementById('progress-text').innerText = pct + '%';
+                                            }
+                                        }
+
+                                        // Update Action Badge
+                                        if (msg.length < 50) {
+                                            currentAction.innerHTML = `<i class="fa-solid fa-terminal me-2"></i> ${msg}`;
+                                        }
+
+                                        addLog(msg, type);
+                                    }
+                                } catch (e) {
+                                    console.error(e);
+                                }
+                            }
+                        });
+                        read();
+                    });
+                }
+                read();
+            });
+        });
+
+        function addLog(message, type) {
+            const logArea = document.getElementById('logArea');
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            
+            const time = new Date().toLocaleTimeString();
+            div.innerHTML = `<span class="log-timestamp">[${time}]</span> ${message}`;
+            
+            logArea.appendChild(div);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>
