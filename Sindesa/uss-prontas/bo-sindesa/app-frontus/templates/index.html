@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontus - Extrator de Estórias</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fa-solid fa-bolt me-2"></i>Frontus
+            </a>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-light btn-sm me-2" onclick="openSettings()">
+                    <i class="fa-solid fa-gear"></i> Configurações
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid h-100 p-4 main-container">
+        <div class="row h-100 g-4">
+            
+            <!-- Left Column: Input -->
+            <div class="col-md-6 d-flex flex-column h-100">
+                <div class="card glass-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"><i class="fa-solid fa-code me-2"></i>Código Frontend</span>
+                        <span class="badge bg-primary">HTML/JS/CSS</span>
+                    </div>
+                    <div class="card-body p-0 editor-container">
+                        <textarea id="codeEditor"></textarea>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button class="btn btn-primary-custom w-100" onclick="generateStory()">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Gerar Estória
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Output -->
+            <div class="col-md-6 d-flex flex-column h-100">
+                <div class="card glass-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-bold"><i class="fa-solid fa-book-open me-2"></i>Estória LogLab</span>
+                        <div>
+                            <button class="btn btn-sm btn-outline-light me-1" onclick="copyToClipboard()">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="saveFile()">
+                                <i class="fa-solid fa-floppy-disk"></i> Salvar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-4 markdown-preview" id="markdownOutput">
+                        <div class="text-muted text-center mt-5">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Cole seu código e clique em Gerar
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Configurações & Integrações</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="configForm">
+                        <div class="mb-3">
+                            <label class="form-label">Provedor / Base URL</label>
+                            <input type="text" class="form-control" id="baseUrl" placeholder="https://api.openai.com/v1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">API Key</label>
+                            <input type="password" class="form-control" id="apiKey">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="modelName" placeholder="gpt-4o">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pasta de Treinamento (Caminho Absoluto)</label>
+                            <input type="text" class="form-control" id="trainingPath">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pasta de Saída (Caminho Absoluto)</label>
+                            <input type="text" class="form-control" id="outputPath">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Prompt do Sistema</label>
+                            <textarea class="form-control" id="systemPrompt" rows="4"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refine Popover (Hidden by default) -->
+    <div id="refinePopover" class="refine-popover">
+        <div class="input-group">
+            <input type="text" class="form-control" id="refineInput" placeholder="Como ajustar este trecho?">
+            <button class="btn btn-primary" onclick="submitRefinement()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="text-center">
+            <div class="transformation-container">
+                <i class="fa-solid fa-code icon-code"></i>
+                <i class="fa-solid fa-arrow-right icon-arrow"></i>
+                <i class="fa-solid fa-book icon-book"></i>
+            </div>
+            <h4 class="mt-3 text-white">Processando...</h4>
+            <div class="progress mt-3" style="width: 300px; height: 6px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

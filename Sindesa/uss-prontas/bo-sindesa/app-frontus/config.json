@@ -1,0 +1,8 @@
+{
+    "api_key": "",
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-4o",
+    "training_path": "",
+    "output_path": "",
+    "system_prompt": "Você é um especialista em criar Estórias de Usuário no padrão LogLab. Analise o código fornecido e extraia os campos, regras e comportamentos para criar uma estória completa."
+}

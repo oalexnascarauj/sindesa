@@ -1,0 +1,195 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 20%);
+}
+
+/* Glassmorphism Utilities */
+.glass-nav {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.glass-modal {
+    background: #1e293b;
+    border: 1px solid var(--border-color);
+    color: white;
+}
+
+/* Layout */
+.main-container {
+    height: calc(100vh - 56px); /* Minus navbar */
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.card-footer {
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Editor Customization */
+.CodeMirror {
+    height: 100% !important;
+    background: transparent !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+}
+
+.editor-container {
+    height: calc(100% - 100px); /* Adjust for header/footer */
+    overflow: hidden;
+}
+
+/* Markdown Output */
+.markdown-preview {
+    overflow-y: auto;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    color: #e2e8f0;
+}
+
+.markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+    color: #fff;
+    margin-top: 1.5rem;
+}
+
+.markdown-preview code {
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #f472b6;
+}
+
+.markdown-preview pre {
+    background: #0f172a;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Buttons */
+.btn-primary-custom {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(99, 102, 241, 0.5);
+    color: white;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.transformation-container {
+    font-size: 3rem;
+    color: #8b5cf6;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-code {
+    animation: fadeOutRight 2s infinite;
+}
+
+.icon-book {
+    animation: fadeInLeft 2s infinite;
+    opacity: 0;
+}
+
+.icon-arrow {
+    font-size: 1.5rem;
+    color: #64748b;
+}
+
+@keyframes fadeOutRight {
+    0% { opacity: 1; transform: translateX(0); }
+    45% { opacity: 0; transform: translateX(20px); }
+    100% { opacity: 0; transform: translateX(20px); }
+}
+
+@keyframes fadeInLeft {
+    0% { opacity: 0; transform: translateX(-20px); }
+    55% { opacity: 0; transform: translateX(-20px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Refine Popover */
+.refine-popover {
+    position: absolute;
+    display: none;
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 1px solid var(--border-color);
+    z-index: 1000;
+    width: 300px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
