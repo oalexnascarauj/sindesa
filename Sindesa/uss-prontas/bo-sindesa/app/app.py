@@ -51,13 +51,14 @@ def save_credentials_to_file(username, password):
     except Exception as e:
         print(f"Erro ao salvar credenciais: {e}")
 
-def get_stories():
+def get_stories(custom_path=None):
+    target_dir = custom_path if custom_path and os.path.exists(custom_path) else STORIES_DIR
     stories = []
-    if not os.path.exists(STORIES_DIR):
+    if not os.path.exists(target_dir):
         return stories
-    for filename in os.listdir(STORIES_DIR):
+    for filename in os.listdir(target_dir):
         if filename.endswith(".md"):
-            stories.append(filename)
+            stories.append(os.path.join(target_dir, filename))
     return stories
 
 def send_event(event_type, payload):
@@ -143,11 +144,11 @@ def find_field_by_label_or_id(driver, field_id, label_text):
     
     return None
 
-def automation_process(username, password, module, assigned_to):
+def automation_process(username, password, module, assigned_to, stories_path=None):
     yield send_event("log", "Iniciando processo de automação...")
     yield send_event("log", f"Responsável selecionado: {assigned_to}")
     
-    stories = get_stories()
+    stories = get_stories(stories_path)
     if not stories:
         yield send_event("log", "Nenhum arquivo de estória encontrado.")
         return
@@ -209,10 +210,10 @@ def automation_process(username, password, module, assigned_to):
             return
 
         # Loop through stories
-        for i, filename in enumerate(stories):
+        for i, file_path in enumerate(stories):
+            filename = os.path.basename(file_path)
             yield send_event("log", f"Processando estória {i+1}/{len(stories)}: {filename}")
             
-            file_path = os.path.join(STORIES_DIR, filename)
             with open(file_path, 'r', encoding='utf-8') as f:
                 content_md = f.read()
                 
@@ -670,12 +671,13 @@ def start():
     password = request.form.get('password')
     module = request.form.get('module')
     assigned_to = request.form.get('assigned_to')
+    stories_path = request.form.get('stories_path')
     save_creds = request.form.get('save_credentials')
     
     if save_creds == 'true':
         save_credentials_to_file(username, password)
     
-    return Response(stream_with_context(automation_process(username, password, module, assigned_to)), mimetype='text/event-stream')
+    return Response(stream_with_context(automation_process(username, password, module, assigned_to, stories_path)), mimetype='text/event-stream')
 
 if __name__ == '__main__':
     print("Iniciando servidor Flask na porta 5000...")

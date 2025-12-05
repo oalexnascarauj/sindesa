@@ -1,287 +1,553 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindesa Automation Hub</title>
+    <title>Plug - Automation Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #3b82f6;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --primary-color: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
             --success-color: #10b981;
+            --warning-color: #f59e0b;
             --error-color: #ef4444;
-            --terminal-bg: #000000;
+            --bg-body: #0a0f1e;
+            --bg-card: #151d2f;
+            --bg-card-hover: #1a2332;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+            --glow-color: rgba(99, 102, 241, 0.15);
+        }
+
+        [data-bs-theme="light"] {
+            --primary-color: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --glow-color: rgba(99, 102, 241, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, var(--glow-color) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, var(--primary-glow) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            animation: gradientShift 20s ease infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(5%, -5%) rotate(120deg); }
+            66% { transform: translate(-5%, 5%) rotate(240deg); }
         }
 
         .navbar {
-            background-color: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #334155;
+            background: rgba(21, 29, 47, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-brand {
-            font-weight: 600;
-            color: var(--text-primary) !important;
-            letter-spacing: -0.5px;
+        [data-bs-theme="light"] .navbar {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .brand-logo {
+            font-weight: 700;
+            font-size: 1.75rem;
+            letter-spacing: -1px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .brand-logo i {
+            color: var(--primary-color);
+            font-size: 2rem;
+            animation: plugPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+
+        @keyframes plugPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+        }
+
+        .slogan {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--border-color);
+            font-style: italic;
         }
 
         .card-custom {
-            background-color: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card-custom:hover::before {
+            left: 100%;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.3);
+            border-color: var(--primary-color);
         }
 
         .card-header-custom {
-            background-color: transparent;
-            border-bottom: 1px solid #334155;
-            padding: 1.5rem;
+            padding: 1.75rem;
+            border-bottom: 1px solid var(--border-color);
             font-weight: 600;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .form-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), transparent);
         }
 
         .form-control, .form-select {
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            color: var(--text-primary);
-            padding: 0.75rem;
+            background-color: var(--bg-body);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.85rem 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .form-control:focus, .form-select:focus {
-            background-color: #0f172a;
-            border-color: var(--accent-color);
-            color: var(--text-primary);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            background-color: var(--bg-body);
+            border-color: var(--primary-color);
+            color: var(--text-main);
+            box-shadow: 0 0 0 4px var(--primary-glow), 0 4px 12px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
         }
 
         .btn-primary-custom {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
             border: none;
-            padding: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 14px;
             font-weight: 600;
+            font-size: 1rem;
             letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary-custom:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary-custom:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        .btn-primary-custom:active {
+            transform: translateY(-1px) scale(0.98);
         }
 
         .btn-primary-custom:disabled {
-            background: #475569;
+            background: var(--text-muted);
             transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
-        /* Dashboard Stats */
-        .stat-card {
-            background-color: rgba(15, 23, 42, 0.5);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid #334155;
-            transition: transform 0.2s;
+        .theme-toggle {
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
         }
 
-        .stat-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-color);
+        .theme-toggle:hover {
+            background: var(--bg-card-hover);
+            color: var(--primary-color);
+            transform: rotate(180deg) scale(1.1);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .theme-toggle i {
+            font-size: 1.2rem;
         }
 
         /* Terminal */
         .terminal-window {
-            background-color: var(--terminal-bg);
-            border-radius: 8px;
-            border: 1px solid #334155;
+            background: linear-gradient(135deg, #0a0f1e 0%, #151d2f 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
             font-family: 'JetBrains Mono', monospace;
-            height: 500px;
+            height: 550px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .terminal-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
         }
 
         .terminal-header {
-            background-color: #1e293b;
-            padding: 8px 16px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
-            gap: 6px;
-            border-bottom: 1px solid #334155;
+            gap: 8px;
             align-items: center;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
         }
 
-        .dot {
-            width: 10px;
-            height: 10px;
+        .dot { 
+            width: 12px; 
+            height: 12px; 
             border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+        .dot:hover { transform: scale(1.2); }
+        .dot-red { background-color: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .dot-yellow { background-color: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
+        .dot-green { background-color: #10b981; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
 
-        .dot-red { background-color: #ef4444; }
-        .dot-yellow { background-color: #f59e0b; }
-        .dot-green { background-color: #10b981; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
 
         .terminal-body {
-            padding: 16px;
+            padding: 20px;
             overflow-y: auto;
             flex-grow: 1;
+            color: #e2e8f0;
             font-size: 0.9rem;
-            color: #d1d5db;
+            line-height: 1.6;
         }
 
         .log-entry {
-            margin-bottom: 4px;
-            border-left: 2px solid transparent;
-            padding-left: 8px;
-            word-wrap: break-word;
+            margin-bottom: 8px;
+            padding: 6px 12px;
+            padding-left: 16px;
+            border-left: 3px solid transparent;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .log-entry:hover {
+            background: rgba(99, 102, 241, 0.05);
         }
 
         .log-info { border-left-color: #3b82f6; }
-        .log-success { color: var(--success-color); border-left-color: var(--success-color); }
-        .log-error { color: var(--error-color); border-left-color: var(--error-color); }
-        .log-timestamp { color: #64748b; font-size: 0.8em; margin-right: 8px; }
+        .log-success { 
+            color: #4ade80; 
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .log-error { 
+            color: #f87171; 
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .timestamp { 
+            color: #64748b; 
+            font-size: 0.75em; 
+            margin-right: 12px;
+            font-weight: 500;
+        }
 
-        /* Progress */
-        .progress-container {
-            margin-top: 20px;
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.03));
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer p {
+            margin: 0.5rem 0;
+        }
+
+        .heart { 
+            color: #ef4444; 
+            animation: beat 1.2s ease-in-out infinite; 
+            display: inline-block;
+            filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
         }
         
-        .progress {
-            height: 8px;
-            background-color: #334155;
-            border-radius: 4px;
-            overflow: hidden;
+        @keyframes beat { 
+            0%, 100% { transform: scale(1); } 
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
         }
 
-        .progress-bar {
-            background: linear-gradient(90deg, var(--accent-color), #60a5fa);
-            transition: width 0.5s ease;
+        /* Additional Utility Classes */
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
         }
+
+        .status-active { background-color: var(--success-color); }
+        .status-processing { background-color: var(--warning-color); }
+        .status-error { background-color: var(--error-color); }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--border-color); 
+            border-radius: 10px;
+            transition: background 0.3s ease;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a; 
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155; 
-            border-radius: 4px;
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569; 
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .stat-value { 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            animation: countUp 0.5s ease-out;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-label { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            color: var(--text-muted);
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand" href="#">
-                <i class="fa-solid fa-robot me-2"></i> SINDESA <span style="color: var(--accent-color)">AUTOMATION</span>
-            </a>
-            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" id="systemStatus">
-                <i class="fa-solid fa-circle-check me-1"></i> System Ready
-            </span>
+
+    <nav class="navbar">
+        <div class="container px-4 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <a href="#" class="brand-logo">
+                    <i class="fa-solid fa-plug"></i> Plug
+                </a>
+                <span class="slogan">Conectando estratégia e execução.</span>
+            </div>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </div>
         </div>
     </nav>
 
-    <div class="container-fluid px-4 py-4">
+    <div class="container py-5">
         <div class="row g-4">
-            <!-- Left Panel: Configuration -->
+            <!-- Config Panel -->
             <div class="col-lg-4">
                 <div class="card-custom h-100">
                     <div class="card-header-custom">
-                        <i class="fa-solid fa-sliders text-primary"></i> Configuração da Execução
+                        <i class="fa-solid fa-sliders text-primary"></i>
+                        <span>Configuração</span>
                     </div>
                     <div class="card-body p-4">
                         <form id="automationForm">
-                            <!-- Saved Users -->
+                            
                             <div class="mb-4">
-                                <label for="saved_users" class="form-label">Perfil de Acesso</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-users"></i></span>
-                                    <select class="form-select" id="saved_users" onchange="fillCredentials()">
-                                        <option value="">Selecionar Usuário...</option>
-                                        {% for user in saved_users %}
-                                        <option value="{{ user.username }}" data-password="{{ user.password }}">{{ user.username }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                                <label class="form-label small text-uppercase fw-bold text-muted">Autenticação</label>
+                                <select class="form-select mb-2" id="saved_users" onchange="fillCredentials()">
+                                    <option value="">Selecionar Perfil...</option>
+                                    {% for user in saved_users %}
+                                    <option value="{{ user.username }}" data-password="{{ user.password }}">{{ user.username }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="text" class="form-control mb-2" id="username" name="username" placeholder="Usuário" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
                             </div>
 
-                            <!-- Credentials -->
-                            <div class="row g-3 mb-4">
-                                <div class="col-12">
-                                    <label for="username" class="form-label">Usuário ServiceNow</label>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="email@exemplo.com" required>
-                                </div>
-                                <div class="col-12">
-                                    <label for="password" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="save_credentials" name="save_credentials" value="true" checked>
-                                        <label class="form-check-label text-secondary" for="save_credentials">Salvar credenciais localmente</label>
+                            <div class="mb-4">
+                                <label class="form-label small text-uppercase fw-bold text-muted">Parâmetros da Tarefa</label>
+                                
+                                <div class="mb-3">
+                                    <label for="stories_path" class="form-label">Pasta de Estórias</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-end-0"><i class="fa-regular fa-folder-open text-muted"></i></span>
+                                        <input type="text" class="form-control border-start-0 ps-0" id="stories_path" name="stories_path" placeholder="C:\Caminho\Para\Estorias">
                                     </div>
+                                    <div class="form-text text-muted small">Deixe em branco para usar a pasta padrão.</div>
                                 </div>
-                            </div>
 
-                            <hr class="border-secondary opacity-25 my-4">
-
-                            <!-- Task Details -->
-                            <div class="mb-4">
-                                <label for="module" class="form-label">Módulo do Projeto</label>
-                                <select class="form-select" id="module" name="module" required>
-                                    <option value="" selected disabled>Selecione...</option>
+                                <select class="form-select mb-3" id="module" name="module" required>
+                                    <option value="" selected disabled>Módulo do Projeto...</option>
                                     <option value="ANIMAL">Módulo Animal</option>
                                     <option value="MIGRAÇÃO">Módulo Migração</option>
                                 </select>
-                            </div>
 
-                            <div class="mb-4">
-                                <label for="assigned_to" class="form-label">Atribuir Tarefa Para</label>
                                 <select class="form-select" id="assigned_to" name="assigned_to" required>
-                                    <option value="" selected disabled>Selecione o responsável...</option>
+                                    <option value="" selected disabled>Atribuir para...</option>
                                     <option value="Alexandre Nascimento Araújo">Alexandre Nascimento Araújo</option>
                                     <option value="Bruno Cruz">Bruno Cruz</option>
                                     <option value="Caroline Soares Pinto Mendes">Caroline Soares Pinto Mendes</option>
@@ -300,73 +566,80 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary-custom w-100 mt-2" id="startBtn">
-                                <i class="fa-solid fa-rocket me-2"></i> INICIAR AUTOMAÇÃO
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" id="save_credentials" name="save_credentials" value="true" checked>
+                                <label class="form-check-label text-muted small" for="save_credentials">Lembrar credenciais</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary-custom w-100" id="startBtn">
+                                <i class="fa-solid fa-bolt me-2"></i> Executar Plug
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Panel: Dashboard & Logs -->
+            <!-- Dashboard -->
             <div class="col-lg-8">
-                <!-- Stats Row -->
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
                         <div class="stat-card">
-                            <div class="stat-value text-primary" id="stat-total">0</div>
-                            <div class="stat-label">Estórias Encontradas</div>
+                            <div class="stat-value" id="stat-total">0</div>
+                            <div class="stat-label">Arquivos</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="stat-card">
                             <div class="stat-value text-success" id="stat-success">0</div>
-                            <div class="stat-label">Tarefas Criadas</div>
+                            <div class="stat-label">Sucessos</div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="stat-card">
                             <div class="stat-value text-danger" id="stat-error">0</div>
-                            <div class="stat-label">Erros</div>
+                            <div class="stat-label">Falhas</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Progress Section -->
-                <div class="card-custom mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-secondary text-uppercase small fw-bold">Progresso da Execução</span>
-                            <span class="text-primary fw-bold" id="progress-text">0%</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%" id="main-progress"></div>
-                        </div>
-                        <div class="mt-3 text-center">
-                            <span class="badge bg-dark border border-secondary text-light p-2" id="current-action">
-                                <i class="fa-solid fa-pause me-2"></i> Aguardando início...
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Terminal -->
                 <div class="terminal-window">
                     <div class="terminal-header">
                         <div class="dot dot-red"></div>
                         <div class="dot dot-yellow"></div>
                         <div class="dot dot-green"></div>
-                        <span class="ms-2 text-secondary small" style="opacity: 0.7">console output</span>
+                        <span class="ms-auto text-muted small opacity-50">Plug Console v1.0</span>
                     </div>
                     <div class="terminal-body" id="logArea">
-                        <div class="log-entry">> System initialized. Ready to start.</div>
+                        <div class="log-entry">> Plug system initialized. Waiting for command...</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <p class="mb-1">Protótipo funcional desenvolvido com IA <span class="heart">❤</span></p>
+            <p class="small opacity-75">Concebido por Alexandre Araújo</p>
+        </div>
+    </footer>
+
     <script>
+        // Theme Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const currentTheme = html.getAttribute('data-bs-theme');
+            
+            if (currentTheme === 'dark') {
+                html.setAttribute('data-bs-theme', 'light');
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                html.setAttribute('data-bs-theme', 'dark');
+                icon.className = 'fa-solid fa-moon';
+            }
+        }
+
         // Credentials Logic
         function fillCredentials() {
             const select = document.getElementById('saved_users');
@@ -394,25 +667,17 @@
             
             const btn = document.getElementById('startBtn');
             const logArea = document.getElementById('logArea');
-            const statusBadge = document.getElementById('systemStatus');
-            const currentAction = document.getElementById('current-action');
             
             // Reset Stats
             document.getElementById('stat-total').innerText = '0';
             document.getElementById('stat-success').innerText = '0';
             document.getElementById('stat-error').innerText = '0';
-            document.getElementById('main-progress').style.width = '0%';
-            document.getElementById('progress-text').innerText = '0%';
             
             let successCount = 0;
             let errorCount = 0;
-            let totalStories = 0;
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> EXECUTANDO...';
-            
-            statusBadge.className = 'badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25';
-            statusBadge.innerHTML = '<i class="fa-solid fa-gears fa-spin me-1"></i> Processing';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Processando...';
             
             logArea.innerHTML = '';
             addLog('Iniciando conexão com o servidor...', 'info');
@@ -430,10 +695,8 @@
                     reader.read().then(({ done, value }) => {
                         if (done) {
                             btn.disabled = false;
-                            btn.innerHTML = '<i class="fa-solid fa-rocket me-2"></i> INICIAR AUTOMAÇÃO';
-                            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success border-opacity-25';
-                            statusBadge.innerHTML = '<i class="fa-solid fa-check-double me-1"></i> Completed';
-                            currentAction.innerHTML = '<i class="fa-solid fa-flag-checkered me-2"></i> Processo Finalizado';
+                            btn.innerHTML = '<i class="fa-solid fa-bolt me-2"></i> Executar Plug';
+                            addLog('Processo finalizado.', 'info');
                             return;
                         }
 
@@ -449,13 +712,9 @@
                                         const msg = data.payload;
                                         let type = 'info';
                                         
-                                        // Update Stats based on log content
                                         if (msg.includes('Encontrados') && msg.includes('arquivos')) {
                                             const match = msg.match(/Encontrados (\d+)/);
-                                            if (match) {
-                                                totalStories = parseInt(match[1]);
-                                                document.getElementById('stat-total').innerText = totalStories;
-                                            }
+                                            if (match) document.getElementById('stat-total').innerText = match[1];
                                         }
                                         
                                         if (msg.includes('Tarefa criada com sucesso')) {
@@ -468,23 +727,6 @@
                                             errorCount++;
                                             document.getElementById('stat-error').innerText = errorCount;
                                             type = 'error';
-                                        }
-
-                                        if (msg.includes('Processando estória')) {
-                                            // "Processando estória 1/3"
-                                            const match = msg.match(/(\d+)\/(\d+)/);
-                                            if (match) {
-                                                const current = parseInt(match[1]);
-                                                const total = parseInt(match[2]);
-                                                const pct = Math.round((current / total) * 100);
-                                                document.getElementById('main-progress').style.width = pct + '%';
-                                                document.getElementById('progress-text').innerText = pct + '%';
-                                            }
-                                        }
-
-                                        // Update Action Badge
-                                        if (msg.length < 50) {
-                                            currentAction.innerHTML = `<i class="fa-solid fa-terminal me-2"></i> ${msg}`;
                                         }
 
                                         addLog(msg, type);
@@ -507,7 +749,7 @@
             div.className = `log-entry log-${type}`;
             
             const time = new Date().toLocaleTimeString();
-            div.innerHTML = `<span class="log-timestamp">[${time}]</span> ${message}`;
+            div.innerHTML = `<span class="timestamp">[${time}]</span> ${message}`;
             
             logArea.appendChild(div);
             logArea.scrollTop = logArea.scrollHeight;
